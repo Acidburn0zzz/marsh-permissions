@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Marsh Permissions</string>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_display_hidden">Display hidden</string>
+    <string name="pref_display_google">Display Google apps</string>
+    <string name="pref_display_android">Display Android system apps</string>
+
+</resources>
