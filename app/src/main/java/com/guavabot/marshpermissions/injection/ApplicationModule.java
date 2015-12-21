@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.guavabot.marshpermissions.AndroidApplication;
 import com.guavabot.marshpermissions.model.AppRepository;
 import com.guavabot.marshpermissions.model.AppRepositoryImpl;
+import com.guavabot.marshpermissions.settings.AppSettings;
 
 import javax.inject.Singleton;
 
@@ -38,5 +39,10 @@ public class ApplicationModule {
     @Provides @Singleton
     SharedPreferences provideSharedPreferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides @Singleton
+    AppSettings provideAppSettings(SharedPreferences prefs) {
+        return new AppSettings(prefs);
     }
 }

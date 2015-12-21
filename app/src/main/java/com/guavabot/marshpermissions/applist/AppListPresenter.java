@@ -1,10 +1,8 @@
 package com.guavabot.marshpermissions.applist;
 
-import android.content.SharedPreferences;
-
 import com.guavabot.marshpermissions.model.App;
 import com.guavabot.marshpermissions.model.AppRepository;
-import com.guavabot.marshpermissions.settings.SettingsActivity;
+import com.guavabot.marshpermissions.settings.AppSettings;
 
 import java.util.List;
 
@@ -17,13 +15,13 @@ public class AppListPresenter {
 
     private final AppListView mAppListView;
     private final AppRepository mAppRepository;
-    private final SharedPreferences mPrefs;
+    private final AppSettings mAppSettings;
 
     @Inject
-    public AppListPresenter(AppListView appListView, AppRepository appRepository, SharedPreferences prefs) {
+    public AppListPresenter(AppListView appListView, AppRepository appRepository, AppSettings appSettings) {
         mAppListView = appListView;
         mAppRepository = appRepository;
-        mPrefs = prefs;
+        mAppSettings = appSettings;
     }
 
     /**
@@ -51,15 +49,12 @@ public class AppListPresenter {
     /**
      * Should the button for each item be displayed?
      */
-    public boolean isDisplayItemButton() {
-        return mPrefs.getBoolean(SettingsActivity.PREF_HIDDEN, false);
+    public boolean isHideItemButton() {
+        return mAppSettings.isDisplayHidden();
     }
 
     private void findApps() {
-        boolean displayHidden = mPrefs.getBoolean(SettingsActivity.PREF_HIDDEN, false);
-        boolean displayGoogle = mPrefs.getBoolean(SettingsActivity.PREF_GOOGLE, false);
-        boolean displayAndroid = mPrefs.getBoolean(SettingsActivity.PREF_ANDROID, false);
-        List<App> apps = mAppRepository.findAppsMarshmallow(displayHidden, displayGoogle, displayAndroid);
+        List<App> apps = mAppRepository.findAppsMarshmallow();
         mAppListView.setItems(apps);
     }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.guavabot.marshpermissions.BaseActivity;
 import com.guavabot.marshpermissions.model.AppRepository;
+import com.guavabot.marshpermissions.settings.AppSettings;
 
 import javax.inject.Singleton;
 
@@ -22,4 +23,5 @@ public interface ApplicationComponent {
     Context context();
     AppRepository appRepository();
     SharedPreferences sharedPreferences();
+    AppSettings appSettings();
 }

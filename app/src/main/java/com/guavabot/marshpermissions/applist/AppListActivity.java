@@ -108,7 +108,7 @@ public class AppListActivity extends BaseActivity implements AppListView {
         public void onBindViewHolder(Holder holder, int position) {
             App app = getItem(position);
             holder.mText1.setText(app.getPackage());
-            holder.mHideBtn.setVisibility(mAppListPresenter.isDisplayItemButton() ?
+            holder.mHideBtn.setVisibility(mAppListPresenter.isHideItemButton() ?
                     View.GONE : View.VISIBLE);
         }
 

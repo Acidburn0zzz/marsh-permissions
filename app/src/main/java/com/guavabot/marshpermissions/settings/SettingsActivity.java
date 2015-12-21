@@ -13,10 +13,6 @@ import com.guavabot.marshpermissions.R;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    public static final String PREF_HIDDEN = "pref_display_hidden";
-    public static final String PREF_GOOGLE = "pref_display_google";
-    public static final String PREF_ANDROID = "pref_display_android";
-
     public static Intent getStartIntent(Context context) {
         return new Intent(context, SettingsActivity.class);
     }

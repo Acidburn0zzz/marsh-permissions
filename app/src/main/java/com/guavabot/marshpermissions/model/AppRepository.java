@@ -9,11 +9,8 @@ public interface AppRepository {
 
     /**
      * Find the list of apps targeting Marshmallow.
-     * @param hidden True to include apps marked hidden
-     * @param google True to include Google apps
-     * @param android True to include apps from the Android system
      */
-    List<App> findAppsMarshmallow(boolean hidden, boolean google, boolean android);
+    List<App> findAppsMarshmallow();
 
     /**
      * Mark an app as hidden.

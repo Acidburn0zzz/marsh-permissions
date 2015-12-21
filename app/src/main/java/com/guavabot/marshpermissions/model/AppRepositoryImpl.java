@@ -6,6 +6,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
+import com.guavabot.marshpermissions.settings.AppSettings;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,20 +26,24 @@ public class AppRepositoryImpl implements AppRepository {
 
     private final Context mContext;
     private final SharedPreferences mPrefs;
+    private final AppSettings mAppSettings;
 
     @Inject
-    public AppRepositoryImpl(Context context, SharedPreferences prefs) {
+    public AppRepositoryImpl(Context context, SharedPreferences prefs, AppSettings appSettings) {
         mContext = context;
         mPrefs = prefs;
+        mAppSettings = appSettings;
     }
 
     @Override
-    public List<App> findAppsMarshmallow(boolean displayHidden, boolean google, boolean android) {
+    public List<App> findAppsMarshmallow() {
         List<App> apps = new ArrayList<>();
 
         PackageManager packageManager = mContext.getPackageManager();
         List<ApplicationInfo> appInfos = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
 
+        boolean google = mAppSettings.isDisplayGoogle();
+        boolean android = mAppSettings.isDisplayAndroid();
         for (ApplicationInfo app : appInfos) {
             if (app.targetSdkVersion >= 23) {
                 if ((google || !app.packageName.contains("com.google."))
@@ -48,7 +54,7 @@ public class AppRepositoryImpl implements AppRepository {
             }
         }
 
-        if (!displayHidden) {
+        if (!mAppSettings.isDisplayHidden()) {
             Set<String> hidden = getHiddenPackages();
             Iterator<App> it = apps.iterator();
             while (it.hasNext()) {
