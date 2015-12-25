@@ -1,6 +1,6 @@
 package com.guavabot.marshpermissions.applist;
 
-import com.guavabot.marshpermissions.injection.PerActivity;
+import com.guavabot.marshpermissions.injection.ActivityScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -17,7 +17,7 @@ public class AppListModule {
         mAppListView = appListView;
     }
 
-    @Provides @PerActivity
+    @Provides @ActivityScope
     AppListView provideAppListView() {
         return mAppListView;
     }

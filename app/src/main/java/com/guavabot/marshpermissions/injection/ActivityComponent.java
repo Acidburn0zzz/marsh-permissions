@@ -9,9 +9,9 @@ import dagger.Component;
  * Activity-level components should extend this component.
  *
  * Subtypes of ActivityComponent should be decorated with annotation:
- * {@link com.guavabot.marshpermissions.injection.PerActivity}
+ * {@link ActivityScope}
  */
-@PerActivity
+@ActivityScope
 @Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
 

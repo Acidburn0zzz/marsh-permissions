@@ -20,7 +20,7 @@ public class ActivityModule {
     /**
      * Expose the activity to dependents in the graph.
      */
-    @Provides @PerActivity
+    @Provides @ActivityScope
     Activity activity() {
         return this.activity;
     }

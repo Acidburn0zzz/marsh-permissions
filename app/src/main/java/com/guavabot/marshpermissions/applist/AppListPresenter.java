@@ -1,5 +1,6 @@
 package com.guavabot.marshpermissions.applist;
 
+import com.guavabot.marshpermissions.injection.ActivityScope;
 import com.guavabot.marshpermissions.model.App;
 import com.guavabot.marshpermissions.model.AppRepository;
 import com.guavabot.marshpermissions.settings.AppSettings;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 /**
  * Presenter for a list of apps in an {@link AppListView}.
  */
+@ActivityScope
 public class AppListPresenter {
 
     private final AppListView mAppListView;
