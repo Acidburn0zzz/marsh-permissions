@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.applist;
+package com.guavabot.marshpermissions.ui.view;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,11 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.guavabot.marshpermissions.BaseActivity;
 import com.guavabot.marshpermissions.R;
-import com.guavabot.marshpermissions.model.App;
-import com.guavabot.marshpermissions.settings.SettingsActivity;
-import com.guavabot.marshpermissions.widget.DividerItemDecoration;
+import com.guavabot.marshpermissions.domain.entity.App;
+import com.guavabot.marshpermissions.injection.AppListComponent;
+import com.guavabot.marshpermissions.injection.AppListModule;
+import com.guavabot.marshpermissions.injection.DaggerAppListComponent;
+import com.guavabot.marshpermissions.ui.presenter.AppListPresenter;
+import com.guavabot.marshpermissions.ui.presenter.AppListView;
+import com.guavabot.marshpermissions.ui.presenter.Presenter;
+import com.guavabot.marshpermissions.ui.widget.DividerItemDecoration;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,9 +63,8 @@ public class AppListActivity extends BaseActivity implements AppListView {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mAppListPresenter.load();
+    protected Presenter getPresenter() {
+        return mAppListPresenter;
     }
 
     @Override
@@ -93,9 +96,15 @@ public class AppListActivity extends BaseActivity implements AppListView {
         mAdapter.setItems(apps);
     }
 
+    @Override
+    public void setHideItemButtons(boolean hide) {
+        mAdapter.setHideItemButtons(hide);
+    }
+
     private class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
 
         private List<App> mApps = Collections.emptyList();
+        private boolean mHideItemButtons = false;
 
         @Override
         public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -108,13 +117,21 @@ public class AppListActivity extends BaseActivity implements AppListView {
         public void onBindViewHolder(Holder holder, int position) {
             App app = getItem(position);
             holder.mText1.setText(app.getPackage());
-            holder.mHideBtn.setVisibility(mAppListPresenter.isHideItemButton() ?
-                    View.GONE : View.VISIBLE);
+            holder.mHideBtn.setVisibility(mHideItemButtons ? View.GONE : View.VISIBLE);
         }
 
         void setItems(List<App> apps) {
-            mApps = apps;
-            notifyDataSetChanged();
+            if (!apps.equals(mApps)) {
+                mApps = apps;
+                notifyDataSetChanged();
+            }
+        }
+
+        void setHideItemButtons(boolean hideItemButtons) {
+            if (hideItemButtons != mHideItemButtons) {
+                mHideItemButtons = hideItemButtons;
+                notifyItemRangeChanged(0, getItemCount());
+            }
         }
 
         App getItem(int position) {

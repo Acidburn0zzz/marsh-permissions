@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.guavabot.marshpermissions.AndroidApplication;
-import com.guavabot.marshpermissions.model.AppRepository;
-import com.guavabot.marshpermissions.model.AppRepositoryImpl;
-import com.guavabot.marshpermissions.settings.AppSettings;
+import com.guavabot.marshpermissions.data.SharedPrefsAppRepository;
+import com.guavabot.marshpermissions.data.SharedPrefsAppSettings;
+import com.guavabot.marshpermissions.domain.gateway.AppRepository;
+import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 
 import javax.inject.Singleton;
 
@@ -32,8 +34,8 @@ public class ApplicationModule {
     }
 
     @Provides @Singleton
-    AppRepository provideUserRepository(AppRepositoryImpl userDataRepository) {
-        return userDataRepository;
+    AppRepository provideUserRepository(Context context, SharedPreferences prefs) {
+        return new SharedPrefsAppRepository(context, prefs);
     }
 
     @Provides @Singleton
@@ -42,7 +44,12 @@ public class ApplicationModule {
     }
 
     @Provides @Singleton
-    AppSettings provideAppSettings(SharedPreferences prefs) {
-        return new AppSettings(prefs);
+    RxSharedPreferences provideRxPreferences(SharedPreferences prefs) {
+        return RxSharedPreferences.create(prefs);
+    }
+
+    @Provides @Singleton
+    AppSettings provideAppSettings(RxSharedPreferences rxPrefs) {
+        return new SharedPrefsAppSettings(rxPrefs);
     }
 }

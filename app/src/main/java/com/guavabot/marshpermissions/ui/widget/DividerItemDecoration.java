@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.widget;
+package com.guavabot.marshpermissions.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,6 +1,6 @@
-package com.guavabot.marshpermissions.applist;
+package com.guavabot.marshpermissions.ui.presenter;
 
-import com.guavabot.marshpermissions.model.App;
+import com.guavabot.marshpermissions.domain.entity.App;
 
 import java.util.List;
 
@@ -18,4 +18,9 @@ public interface AppListView {
      * Display this list of apps.
      */
     void setItems(List<App> apps);
+
+    /**
+     * Configure the item buttons to be hidden or not.
+     */
+    void setHideItemButtons(boolean hide);
 }
