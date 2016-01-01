@@ -47,11 +47,9 @@ public class GetAppListUseCase implements UseCase {
                     public List<App> call(List<App> appsIn, Boolean hidden, Boolean google, Boolean android) {
                         List<App> apps = new ArrayList<>();
                         for (App app : appsIn) {
-                            String pkg = app.getPackage();
                             if ((hidden || !app.isHidden())
-                                    && (google || !pkg.startsWith("com.google."))
-                                    && (android || !pkg.startsWith("com.android."))
-                                    && !pkg.startsWith("com.motorola")) {
+                                    && (google || !app.isGoogleApp())
+                                    && (android || !app.isAndroidApp())) {
                                 apps.add(app);
                             }
                         }
