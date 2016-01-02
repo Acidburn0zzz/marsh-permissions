@@ -13,8 +13,9 @@ import com.guavabot.marshpermissions.R;
  */
 public class SettingsActivity extends AppCompatActivity {
 
-    public static Intent getStartIntent(Context context) {
-        return new Intent(context, SettingsActivity.class);
+    public static void start(Context context) {
+        Intent intent = new Intent(context, SettingsActivity.class);
+        context.startActivity(intent);
     }
 
     @Override

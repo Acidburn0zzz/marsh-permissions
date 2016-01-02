@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/app_frame"
     android:minHeight="?attr/listPreferredItemHeight"
     android:gravity="center_vertical"
     android:background="?selectableItemBackground"
     >
 
     <TextView
-        android:id="@+id/text1"
+        android:id="@+id/app_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -21,7 +22,7 @@
         />
 
     <TextView
-        android:id="@+id/hide"
+        android:id="@+id/app_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"

@@ -28,6 +28,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Displays the screen with the list of apps that target Marshmallow.
  */
@@ -76,11 +80,14 @@ public class AppListActivity extends BaseActivity implements AppListView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_save) {
-            Intent intent = SettingsActivity.getStartIntent(this);
-            startActivity(intent);
+            startSettings();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startSettings() {
+        SettingsActivity.start(this);
     }
 
     public void startAppInfo(String packageName) {
@@ -101,14 +108,14 @@ public class AppListActivity extends BaseActivity implements AppListView {
         mAdapter.setHideItemButtons(hide);
     }
 
-    private class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
+    class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
 
         private List<App> mApps = Collections.emptyList();
         private boolean mHideItemButtons = false;
 
         @Override
         public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(AppListActivity.this);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             View view = inflater.inflate(R.layout.list_item, parent, false);
             return new Holder(view);
         }
@@ -116,8 +123,7 @@ public class AppListActivity extends BaseActivity implements AppListView {
         @Override
         public void onBindViewHolder(Holder holder, int position) {
             App app = getItem(position);
-            holder.mText1.setText(app.getPackage());
-            holder.mHideBtn.setVisibility(mHideItemButtons ? View.GONE : View.VISIBLE);
+            holder.bind(app);
         }
 
         void setItems(List<App> apps) {
@@ -145,25 +151,29 @@ public class AppListActivity extends BaseActivity implements AppListView {
 
         class Holder extends RecyclerView.ViewHolder {
 
-            final TextView mText1;
-            final TextView mHideBtn;
+            @Bind(R.id.app_text) TextView mText1;
+            @Bind(R.id.app_button) TextView mHideBtn;
+            private App mApp;
 
             public Holder(View itemView) {
                 super(itemView);
-                mText1 = (TextView) itemView.findViewById(R.id.text1);
-                mHideBtn = (TextView) itemView.findViewById(R.id.hide);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mAppListPresenter.onItemClicked(mAdapter.getItem(getAdapterPosition()));
-                    }
-                });
-                mHideBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mAppListPresenter.onItemButtonClicked(mAdapter.getItem(getAdapterPosition()));
-                    }
-                });
+                ButterKnife.bind(this, itemView);
+            }
+
+            public void bind(App app) {
+                mApp = app;
+                mText1.setText(app.getPackage());
+                mHideBtn.setVisibility(mHideItemButtons ? View.GONE : View.VISIBLE);
+            }
+
+            @OnClick(R.id.app_frame)
+            void onItemClick() {
+                mAppListPresenter.onItemClicked(mApp);
+            }
+
+            @OnClick(R.id.app_button)
+            void onButtonClick() {
+                mAppListPresenter.onItemButtonClicked(mApp);
             }
         }
     }
