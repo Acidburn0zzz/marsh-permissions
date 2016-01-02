@@ -113,6 +113,10 @@ public class AppListActivity extends BaseActivity implements AppListView {
         private List<App> mApps = Collections.emptyList();
         private boolean mHideItemButtons = false;
 
+        Adapter() {
+            setHasStableIds(true);
+        }
+
         @Override
         public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -142,6 +146,11 @@ public class AppListActivity extends BaseActivity implements AppListView {
 
         App getItem(int position) {
             return mApps.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return getItem(position).getPackage().hashCode();
         }
 
         @Override
