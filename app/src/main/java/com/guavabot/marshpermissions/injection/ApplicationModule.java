@@ -34,8 +34,8 @@ public class ApplicationModule {
     }
 
     @Provides @Singleton
-    AppRepository provideUserRepository(Context context, SharedPreferences prefs) {
-        return new SharedPrefsAppRepository(context, prefs);
+    AppRepository provideUserRepository(Context context, RxSharedPreferences rxPrefs) {
+        return new SharedPrefsAppRepository(context.getPackageManager(), rxPrefs);
     }
 
     @Provides @Singleton

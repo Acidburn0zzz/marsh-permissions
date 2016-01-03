@@ -19,7 +19,7 @@ public interface AppRepository {
     /**
      * Mark an app as hidden.
      */
-    Observable<Void> setAppHidden(App app);
+    Observable<Void> setAppHidden(String appPackage);
 
     /**
      * Pushes a notification each time an app is hidden by the user.

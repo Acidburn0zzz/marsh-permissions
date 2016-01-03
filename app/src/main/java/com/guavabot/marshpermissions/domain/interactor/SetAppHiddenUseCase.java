@@ -17,7 +17,7 @@ public class SetAppHiddenUseCase implements UseCase {
     }
 
     public Observable<Void> execute(App app) {
-        return mAppRepository.setAppHidden(app);
+        return mAppRepository.setAppHidden(app.getPackage());
     }
 
 }

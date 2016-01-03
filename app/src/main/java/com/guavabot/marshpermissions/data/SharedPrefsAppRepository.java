@@ -1,11 +1,10 @@
 package com.guavabot.marshpermissions.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 
@@ -24,16 +23,18 @@ import rx.subjects.PublishSubject;
  */
 public class SharedPrefsAppRepository implements AppRepository {
 
-    private static final String KEY_HIDDEN_APPS = "hidden";
-
-    private final Context mContext;
-    private final SharedPreferences mPrefs;
+    private final PackageManager mPackageManager;
+    private final HiddenPackages mHiddenPackages;
 
     private final PublishSubject<Void> mUpdateSubject = PublishSubject.create();
 
-    public SharedPrefsAppRepository(Context context, SharedPreferences prefs) {
-        mContext = context;
-        mPrefs = prefs;
+    public SharedPrefsAppRepository(PackageManager packageManager, RxSharedPreferences rxPrefs) {
+        this(packageManager, new HiddenPackages(rxPrefs));
+    }
+
+    public SharedPrefsAppRepository(PackageManager packageManager, HiddenPackages hiddenPackages) {
+        mPackageManager = packageManager;
+        mHiddenPackages = hiddenPackages;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class SharedPrefsAppRepository implements AppRepository {
     private List<App> doFindAppsMarshmallow() {
         List<App> apps = new ArrayList<>();
 
-        Set<String> hidden = getHiddenPackages();
+        Set<String> hidden = mHiddenPackages.get();
         List<ApplicationInfo> appInfos = getApplicationInfos();
         for (ApplicationInfo app : appInfos) {
             if (app.targetSdkVersion >= 23) {
@@ -61,8 +62,7 @@ public class SharedPrefsAppRepository implements AppRepository {
     }
 
     private List<ApplicationInfo> getApplicationInfos() {
-        PackageManager packageManager = mContext.getPackageManager();
-        return packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+        return mPackageManager.getInstalledApplications(PackageManager.GET_META_DATA);
     }
 
     @NonNull
@@ -71,31 +71,24 @@ public class SharedPrefsAppRepository implements AppRepository {
     }
 
     @Override
-    public Observable<Void> setAppHidden(final App app) {
+    public Observable<Void> setAppHidden(final String appPackage) {
         return Observable.defer(new Func0<Observable<Void>>() {
             @Override
             public Observable<Void> call() {
-                doSetAppHidden(app);
-                return Observable.just(null);
+                doSetAppHidden(appPackage);
+                return Observable.empty();
             }
         });
     }
 
-    private void doSetAppHidden(App app) {
-        Set<String> oldHidden = getHiddenPackages();
-        if (!oldHidden.contains(app.getPackage())) {
+    private void doSetAppHidden(String appPackage) {
+        Set<String> oldHidden = mHiddenPackages.get();
+        if (!oldHidden.contains(appPackage)) {
             Set<String> newHidden = new HashSet<>(oldHidden);
-            newHidden.add(app.getPackage());
-            mPrefs.edit()
-                    .putStringSet(KEY_HIDDEN_APPS, newHidden)
-                    .apply();
+            newHidden.add(appPackage);
+            mHiddenPackages.set(newHidden);
 
             mUpdateSubject.onNext(null);
         }
-    }
-
-    @NonNull
-    private Set<String> getHiddenPackages() {
-        return mPrefs.getStringSet(KEY_HIDDEN_APPS, new HashSet<String>());
     }
 }
