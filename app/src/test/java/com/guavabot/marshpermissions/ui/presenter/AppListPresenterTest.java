@@ -23,10 +23,10 @@ import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AppListPresenterTest {
@@ -63,10 +63,10 @@ public class AppListPresenterTest {
     public void shouldLoadAndSetItemsOnStart() throws Exception {
         List<App> apps = new ArrayList<>();
         apps.add(mock(App.class));
-        when(mGetAppListUseCase.execute())
-                .thenReturn(Observable.just(apps));
-        when(mAppSettings.isDisplayHidden())
-                .thenReturn(Observable.just(true));
+        given(mGetAppListUseCase.execute())
+                .willReturn(Observable.just(apps));
+        given(mAppSettings.isDisplayHidden())
+                .willReturn(Observable.just(true));
 
         mTested.onStart();
 
@@ -77,7 +77,7 @@ public class AppListPresenterTest {
     @Test
     public void shouldStartAppInfoWhenItemClicked() throws Exception {
         App app = mock(App.class);
-        when(app.getPackage()).thenReturn(PACKAGE);
+        given(app.getPackage()).willReturn(PACKAGE);
 
         mTested.onItemClicked(app);
 
@@ -96,8 +96,8 @@ public class AppListPresenterTest {
                     }
                 });
         App app = mock(App.class);
-        when(mSetAppHiddenUseCase.execute(app))
-                .thenReturn(observable);
+        given(mSetAppHiddenUseCase.execute(app))
+                .willReturn(observable);
 
         mTested.onItemButtonClicked(app);
 
