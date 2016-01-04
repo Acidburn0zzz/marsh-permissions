@@ -91,4 +91,26 @@ public class SharedPrefsAppRepository implements AppRepository {
             mUpdateSubject.onNext(null);
         }
     }
+
+    @Override
+    public Observable<Void> setAppNotHidden(final String appPackage) {
+        return Observable.defer(new Func0<Observable<Void>>() {
+            @Override
+            public Observable<Void> call() {
+                doSetAppNotHidden(appPackage);
+                return Observable.empty();
+            }
+        });
+    }
+
+    private void doSetAppNotHidden(String appPackage) {
+        Set<String> oldHidden = mHiddenPackages.get();
+        if (oldHidden.contains(appPackage)) {
+            Set<String> newHidden = new HashSet<>(oldHidden);
+            newHidden.remove(appPackage);
+            mHiddenPackages.set(newHidden);
+
+            mUpdateSubject.onNext(null);
+        }
+    }
 }

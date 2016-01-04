@@ -8,16 +8,20 @@ import rx.Observable;
 /**
  * Interactor for marking an app as hidden.
  */
-public class SetAppHiddenUseCase implements UseCase {
+public class ToggleAppHiddenUseCase implements UseCase {
 
     private final AppRepository mAppRepository;
 
-    public SetAppHiddenUseCase(AppRepository appRepository) {
+    public ToggleAppHiddenUseCase(AppRepository appRepository) {
         mAppRepository = appRepository;
     }
 
     public Observable<Void> execute(App app) {
-        return mAppRepository.setAppHidden(app.getPackage());
+        if (app.isHidden()) {
+            return mAppRepository.setAppNotHidden(app.getPackage());
+        } else {
+            return mAppRepository.setAppHidden(app.getPackage());
+        }
     }
 
 }

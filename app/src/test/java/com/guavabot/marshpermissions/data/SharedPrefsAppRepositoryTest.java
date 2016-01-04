@@ -14,13 +14,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import rx.observers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anySetOf;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -101,6 +104,14 @@ public class SharedPrefsAppRepositoryTest {
         mTested.setAppHidden("package4")
                 .subscribe();
 
-        verify(mHiddenPackages).set(anySetOf(String.class));
+        verify(mHiddenPackages).set((Set<String>) argThat(hasItems("package4")));
+    }
+
+    @Test
+    public void shouldRemoveAppWhenSettingAppNotHidden() {
+        mTested.setAppNotHidden("package2")
+                .subscribe();
+
+        verify(mHiddenPackages).set((Set<String>) argThat(not(hasItems("package2"))));
     }
 }

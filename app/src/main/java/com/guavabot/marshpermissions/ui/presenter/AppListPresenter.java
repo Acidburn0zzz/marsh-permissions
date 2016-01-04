@@ -4,7 +4,7 @@ import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
-import com.guavabot.marshpermissions.domain.interactor.SetAppHiddenUseCase;
+import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.injection.ActivityScope;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class AppListPresenter implements Presenter {
 
     private final AppListView mAppListView;
     private final GetAppListUseCase mGetAppListUseCase;
-    private final SetAppHiddenUseCase mSetAppHiddenUseCase;
+    private final ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
     private final AppSettings mAppSettings;
     private final Schedulers mSchedulers;
 
@@ -30,11 +30,11 @@ public class AppListPresenter implements Presenter {
 
     @Inject
     public AppListPresenter(AppListView appListView, GetAppListUseCase getAppListUseCase,
-                            SetAppHiddenUseCase setAppHiddenUseCase, AppSettings appSettings,
+                            ToggleAppHiddenUseCase toggleAppHiddenUseCase, AppSettings appSettings,
                             Schedulers schedulers) {
         mAppListView = appListView;
         mGetAppListUseCase = getAppListUseCase;
-        mSetAppHiddenUseCase = setAppHiddenUseCase;
+        mToggleAppHiddenUseCase = toggleAppHiddenUseCase;
         mAppSettings = appSettings;
         mSchedulers = schedulers;
     }
@@ -76,7 +76,7 @@ public class AppListPresenter implements Presenter {
      * The button for an item was clicked.
      */
     public void onItemButtonClicked(App app) {
-        mSetAppHiddenUseCase.execute(app)
+        mToggleAppHiddenUseCase.execute(app)
                 .subscribeOn(mSchedulers.io())
                 .subscribe();
     }

@@ -4,7 +4,7 @@ import com.guavabot.marshpermissions.TestSchedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
-import com.guavabot.marshpermissions.domain.interactor.SetAppHiddenUseCase;
+import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +22,6 @@ import rx.functions.Action0;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -36,14 +35,14 @@ public class AppListPresenterTest {
     @Mock
     private GetAppListUseCase mGetAppListUseCase;
     @Mock
-    private SetAppHiddenUseCase mSetAppHiddenUseCase;
+    private ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
     @Mock
     private AppSettings mAppSettings;
     private static final String PACKAGE = "com.my.package";
 
     @Before
     public void setUp() throws Exception {
-        mTested = new AppListPresenter(mAppListView, mGetAppListUseCase, mSetAppHiddenUseCase,
+        mTested = new AppListPresenter(mAppListView, mGetAppListUseCase, mToggleAppHiddenUseCase,
                 mAppSettings, new TestSchedulers());
     }
 
@@ -78,23 +77,21 @@ public class AppListPresenterTest {
     }
 
     @Test
-    public void shouldHideAppWhenItemButtonClicked() throws Exception {
+    public void shouldToggleAppHiddenWhenItemButtonClicked() throws Exception {
         final boolean[] subscribed = {false};
-        Observable<Void> observable = Observable
-                .just((Void) null)
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        subscribed[0] = true;
-                    }
-                });
         App app = mock(App.class);
-        given(mSetAppHiddenUseCase.execute(app))
-                .willReturn(observable);
+        given(mToggleAppHiddenUseCase.execute(app))
+                .willReturn(Observable.just((Void) null)
+                        .doOnSubscribe(new Action0() {
+                            @Override
+                            public void call() {
+                                subscribed[0] = true;
+                            }
+                        }));
 
         mTested.onItemButtonClicked(app);
 
-        verify(mSetAppHiddenUseCase).execute(any(App.class));
+        verify(mToggleAppHiddenUseCase).execute(app);
         assertThat(subscribed[0]).isTrue();
     }
 
