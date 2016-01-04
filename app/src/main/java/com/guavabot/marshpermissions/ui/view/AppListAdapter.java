@@ -21,12 +21,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * <p>Created by Ivan on 1/2/16.
+ * Adapter for a list of apps with a button.
  */
 @ActivityScope
 class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
 
     private final AppListPresenter mAppListPresenter;
+    private final ThemeTextColors mTextColors = new ThemeTextColors();
 
     private List<App> mApps = Collections.emptyList();
 
@@ -86,6 +87,7 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
         public void bind(App app) {
             mApp = app;
             mText1.setText(app.getPackage());
+            mText1.setTextColor(app.isHidden() ? mTextColors.getColorSecondary(mText1) : mTextColors.getColorPrimary(mText1));
             mHideBtn.setText(app.isHidden() ? R.string.app_btn_unhide : R.string.app_btn_hide);
         }
 
