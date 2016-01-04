@@ -24,6 +24,9 @@ public class GetAppListUseCase implements UseCase {
         mAppSettings = appSettings;
     }
 
+    /**
+     * Returns a hot observable with lists of apps to display.
+     */
     public Observable<List<App>> execute() {
         //The stream will emit new
         return mAppRepository.hiddenAppsUpdate()

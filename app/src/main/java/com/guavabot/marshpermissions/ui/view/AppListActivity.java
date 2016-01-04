@@ -23,6 +23,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
+
 /**
  * Displays the screen with the list of apps that target Marshmallow.
  */
@@ -93,4 +95,8 @@ public class AppListActivity extends BaseActivity implements AppListView {
         mAdapter.setItems(apps);
     }
 
+    @Override
+    public Observable<String> getPackageFilter() {
+        return Observable.just(null); //TODO
+    }
 }

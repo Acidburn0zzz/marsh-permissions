@@ -2,7 +2,7 @@ package com.guavabot.marshpermissions.ui.presenter;
 
 import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
-import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
+import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.injection.ActivityScope;
 
@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -20,18 +21,18 @@ import rx.subscriptions.CompositeSubscription;
 public class AppListPresenter implements Presenter {
 
     private final AppListView mAppListView;
-    private final GetAppListUseCase mGetAppListUseCase;
+    private final GetAppListFilteredUseCase mGetAppListFilteredUseCase;
     private final ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
     private final Schedulers mSchedulers;
 
     private CompositeSubscription mSubscriptions;
 
     @Inject
-    public AppListPresenter(AppListView appListView, GetAppListUseCase getAppListUseCase,
+    public AppListPresenter(AppListView appListView, GetAppListFilteredUseCase getAppListFilteredUseCase,
                             ToggleAppHiddenUseCase toggleAppHiddenUseCase,
                             Schedulers schedulers) {
         mAppListView = appListView;
-        mGetAppListUseCase = getAppListUseCase;
+        mGetAppListFilteredUseCase = getAppListFilteredUseCase;
         mToggleAppHiddenUseCase = toggleAppHiddenUseCase;
         mSchedulers = schedulers;
     }
@@ -39,7 +40,8 @@ public class AppListPresenter implements Presenter {
     @Override
     public void onStart() {
         mSubscriptions = new CompositeSubscription();
-        mSubscriptions.add(mGetAppListUseCase.execute()
+        Observable<String> packageFilterStream = mAppListView.getPackageFilter();
+        mSubscriptions.add(mGetAppListFilteredUseCase.execute(packageFilterStream)
                 .subscribeOn(mSchedulers.io())
                 .observeOn(mSchedulers.mainThread())
                 .subscribe(new Action1<List<App>>() {

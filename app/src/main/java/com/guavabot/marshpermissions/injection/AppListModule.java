@@ -2,6 +2,7 @@ package com.guavabot.marshpermissions.injection;
 
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 import com.guavabot.marshpermissions.domain.gateway.AppSettings;
+import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.ui.presenter.AppListView;
@@ -29,6 +30,11 @@ public class AppListModule {
     @Provides @ActivityScope
     GetAppListUseCase provideGetAppListUseCase(AppRepository appRepository, AppSettings appSettings) {
         return new GetAppListUseCase(appRepository, appSettings);
+    }
+
+    @Provides @ActivityScope
+    GetAppListFilteredUseCase provideGetAppListFilteredUseCase(GetAppListUseCase getAppListUseCase) {
+        return new GetAppListFilteredUseCase(getAppListUseCase);
     }
 
     @Provides @ActivityScope

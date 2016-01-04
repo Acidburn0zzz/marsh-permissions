@@ -66,7 +66,7 @@ public class GetAppListUseCaseTest {
                 .subscribe(subscriber);
 
         subscriber.assertValue(mList1);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
     }
 
     @Test
@@ -89,12 +89,12 @@ public class GetAppListUseCaseTest {
                 .subscribe(subscriber);
 
         subscriber.assertValue(mListEmpty);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
 
         scheduler.advanceTimeBy(1, TimeUnit.SECONDS);
         //noinspection unchecked
         subscriber.assertValues(mListEmpty, mList1);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
     }
 
     @Test
@@ -117,12 +117,12 @@ public class GetAppListUseCaseTest {
                 .subscribe(subscriber);
 
         subscriber.assertValue(mListEmpty);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
 
         scheduler.advanceTimeBy(1, TimeUnit.SECONDS);
         //noinspection unchecked
         subscriber.assertValues(mListEmpty, mList1);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
     }
 
     @Test
@@ -145,12 +145,12 @@ public class GetAppListUseCaseTest {
                 .subscribe(subscriber);
 
         subscriber.assertValue(mListEmpty);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
 
         scheduler.advanceTimeBy(1, TimeUnit.SECONDS);
         //noinspection unchecked
         subscriber.assertValues(mListEmpty, mList1);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
     }
 
     @Test
@@ -173,11 +173,11 @@ public class GetAppListUseCaseTest {
                 .subscribe(subscriber);
 
         subscriber.assertValue(mListEmpty);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
 
         scheduler.advanceTimeBy(1, TimeUnit.SECONDS);
         //noinspection unchecked
         subscriber.assertValues(mListEmpty, mList1);
-        subscriber.assertNotCompleted();
+        subscriber.assertNoTerminalEvent();
     }
 }
