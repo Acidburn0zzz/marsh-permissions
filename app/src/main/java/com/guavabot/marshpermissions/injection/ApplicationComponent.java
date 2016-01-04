@@ -1,9 +1,8 @@
 package com.guavabot.marshpermissions.injection;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.ui.view.BaseActivity;
@@ -23,7 +22,6 @@ public interface ApplicationComponent {
 
     Context context();
     AppRepository appRepository();
-    SharedPreferences sharedPreferences();
-    RxSharedPreferences rxPreferences();
     AppSettings appSettings();
+    Schedulers schedulers();
 }

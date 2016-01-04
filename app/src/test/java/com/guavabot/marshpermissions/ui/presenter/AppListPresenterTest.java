@@ -1,5 +1,6 @@
 package com.guavabot.marshpermissions.ui.presenter;
 
+import com.guavabot.marshpermissions.TestSchedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
@@ -16,11 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.plugins.RxAndroidPlugins;
-import rx.android.plugins.RxAndroidSchedulersHook;
 import rx.functions.Action0;
-import rx.schedulers.Schedulers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -45,13 +43,8 @@ public class AppListPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
-            @Override
-            public Scheduler getMainThreadScheduler() {
-                return Schedulers.immediate();
-            }
-        });
-        mTested = new AppListPresenter(mAppListView, mGetAppListUseCase, mSetAppHiddenUseCase, mAppSettings);
+        mTested = new AppListPresenter(mAppListView, mGetAppListUseCase, mSetAppHiddenUseCase,
+                mAppSettings, new TestSchedulers());
     }
 
     @After

@@ -1,5 +1,6 @@
 package com.guavabot.marshpermissions.ui.presenter;
 
+import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
@@ -10,9 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -25,24 +24,27 @@ public class AppListPresenter implements Presenter {
     private final GetAppListUseCase mGetAppListUseCase;
     private final SetAppHiddenUseCase mSetAppHiddenUseCase;
     private final AppSettings mAppSettings;
+    private final Schedulers mSchedulers;
 
     private CompositeSubscription mSubscriptions;
 
     @Inject
     public AppListPresenter(AppListView appListView, GetAppListUseCase getAppListUseCase,
-                            SetAppHiddenUseCase setAppHiddenUseCase, AppSettings appSettings) {
+                            SetAppHiddenUseCase setAppHiddenUseCase, AppSettings appSettings,
+                            Schedulers schedulers) {
         mAppListView = appListView;
         mGetAppListUseCase = getAppListUseCase;
         mSetAppHiddenUseCase = setAppHiddenUseCase;
         mAppSettings = appSettings;
+        mSchedulers = schedulers;
     }
 
     @Override
     public void onStart() {
         mSubscriptions = new CompositeSubscription();
         mSubscriptions.add(mGetAppListUseCase.execute()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(mSchedulers.io())
+                .observeOn(mSchedulers.mainThread())
                 .subscribe(new Action1<List<App>>() {
                     @Override
                     public void call(List<App> apps) {
@@ -75,7 +77,7 @@ public class AppListPresenter implements Presenter {
      */
     public void onItemButtonClicked(App app) {
         mSetAppHiddenUseCase.execute(app)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(mSchedulers.io())
                 .subscribe();
     }
 

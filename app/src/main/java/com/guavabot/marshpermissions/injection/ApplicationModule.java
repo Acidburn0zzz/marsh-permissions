@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.guavabot.marshpermissions.AndroidApplication;
+import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.data.SharedPrefsAppRepository;
 import com.guavabot.marshpermissions.data.SharedPrefsAppSettings;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
@@ -51,5 +52,10 @@ public class ApplicationModule {
     @Provides @Singleton
     AppSettings provideAppSettings(RxSharedPreferences rxPrefs) {
         return new SharedPrefsAppSettings(rxPrefs);
+    }
+
+    @Provides @Singleton
+    Schedulers provideSchedulers() {
+        return new Schedulers();
     }
 }
