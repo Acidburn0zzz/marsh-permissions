@@ -93,9 +93,4 @@ public class AppListActivity extends BaseActivity implements AppListView {
         mAdapter.setItems(apps);
     }
 
-    @Override
-    public void setHideItemButtons(boolean hide) {
-        mAdapter.setHideItemButtons(hide);
-    }
-
 }

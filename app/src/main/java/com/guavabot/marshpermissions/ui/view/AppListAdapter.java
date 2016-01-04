@@ -29,7 +29,6 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
     private final AppListPresenter mAppListPresenter;
 
     private List<App> mApps = Collections.emptyList();
-    private boolean mHideItemButtons = false;
 
     @Inject
     AppListAdapter(AppListPresenter appListPresenter) {
@@ -54,13 +53,6 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
         if (!apps.equals(mApps)) {
             mApps = apps;
             notifyDataSetChanged();
-        }
-    }
-
-    void setHideItemButtons(boolean hideItemButtons) {
-        if (hideItemButtons != mHideItemButtons) {
-            mHideItemButtons = hideItemButtons;
-            notifyItemRangeChanged(0, getItemCount());
         }
     }
 
@@ -94,7 +86,7 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
         public void bind(App app) {
             mApp = app;
             mText1.setText(app.getPackage());
-            mHideBtn.setVisibility(mHideItemButtons ? View.GONE : View.VISIBLE);
+            mHideBtn.setText(app.isHidden() ? R.string.app_btn_unhide : R.string.app_btn_hide);
         }
 
         @OnClick(R.id.app_frame)

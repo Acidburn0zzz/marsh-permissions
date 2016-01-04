@@ -18,9 +18,4 @@ public interface AppListView {
      * Display this list of apps.
      */
     void setItems(List<App> apps);
-
-    /**
-     * Configure the item buttons to be hidden or not.
-     */
-    void setHideItemButtons(boolean hide);
 }

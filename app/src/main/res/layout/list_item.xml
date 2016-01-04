@@ -31,7 +31,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:background="?selectableItemBackground"
-        android:text="Hide"
+        android:text="@string/app_btn_hide"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
         android:textColor="@color/colorAccent"
         />

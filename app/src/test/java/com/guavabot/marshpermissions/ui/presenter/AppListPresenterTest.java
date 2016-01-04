@@ -2,7 +2,6 @@ package com.guavabot.marshpermissions.ui.presenter;
 
 import com.guavabot.marshpermissions.TestSchedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
-import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 
@@ -36,14 +35,12 @@ public class AppListPresenterTest {
     private GetAppListUseCase mGetAppListUseCase;
     @Mock
     private ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
-    @Mock
-    private AppSettings mAppSettings;
     private static final String PACKAGE = "com.my.package";
 
     @Before
     public void setUp() throws Exception {
         mTested = new AppListPresenter(mAppListView, mGetAppListUseCase, mToggleAppHiddenUseCase,
-                mAppSettings, new TestSchedulers());
+                new TestSchedulers());
     }
 
     @After
@@ -57,13 +54,10 @@ public class AppListPresenterTest {
         apps.add(mock(App.class));
         given(mGetAppListUseCase.execute())
                 .willReturn(Observable.just(apps));
-        given(mAppSettings.isDisplayHidden())
-                .willReturn(Observable.just(true));
 
         mTested.onStart();
 
         verify(mAppListView).setItems(apps);
-        verify(mAppListView).setHideItemButtons(true);
     }
 
     @Test

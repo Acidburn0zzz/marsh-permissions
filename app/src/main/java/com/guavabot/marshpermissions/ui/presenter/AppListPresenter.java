@@ -2,7 +2,6 @@ package com.guavabot.marshpermissions.ui.presenter;
 
 import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
-import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.injection.ActivityScope;
@@ -23,19 +22,17 @@ public class AppListPresenter implements Presenter {
     private final AppListView mAppListView;
     private final GetAppListUseCase mGetAppListUseCase;
     private final ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
-    private final AppSettings mAppSettings;
     private final Schedulers mSchedulers;
 
     private CompositeSubscription mSubscriptions;
 
     @Inject
     public AppListPresenter(AppListView appListView, GetAppListUseCase getAppListUseCase,
-                            ToggleAppHiddenUseCase toggleAppHiddenUseCase, AppSettings appSettings,
+                            ToggleAppHiddenUseCase toggleAppHiddenUseCase,
                             Schedulers schedulers) {
         mAppListView = appListView;
         mGetAppListUseCase = getAppListUseCase;
         mToggleAppHiddenUseCase = toggleAppHiddenUseCase;
-        mAppSettings = appSettings;
         mSchedulers = schedulers;
     }
 
@@ -49,13 +46,6 @@ public class AppListPresenter implements Presenter {
                     @Override
                     public void call(List<App> apps) {
                         mAppListView.setItems(apps);
-                    }
-                }));
-        mSubscriptions.add(mAppSettings.isDisplayHidden()
-                .subscribe(new Action1<Boolean>() {
-                    @Override
-                    public void call(Boolean displayHidden) {
-                        mAppListView.setHideItemButtons(displayHidden);
                     }
                 }));
     }
