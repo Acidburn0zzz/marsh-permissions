@@ -7,5 +7,7 @@
     <string name="pref_display_android">Display Android system apps</string>
     <string name="app_btn_hide">Hide</string>
     <string name="app_btn_unhide">Unhide</string>
+    <string name="action_search">Search</string>
+    <string name="search_hint">Search packages</string>
 
 </resources>
