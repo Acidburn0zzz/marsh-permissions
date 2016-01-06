@@ -42,7 +42,8 @@ public class GetAppListFilteredUseCase implements UseCase {
                                 });
                     }
                 });
-        return Observable.switchOnNext(stream);
+        return Observable.switchOnNext(stream)
+                .distinctUntilChanged();
     }
 
 }
