@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
+import com.jakewharton.rxrelay.PublishRelay;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +16,6 @@ import java.util.Set;
 
 import rx.Observable;
 import rx.functions.Func0;
-import rx.subjects.PublishSubject;
 
 /**
  * {@link AppRepository} that retrieves installed apps from the PackageManager and
@@ -26,7 +26,7 @@ public class SharedPrefsAppRepository implements AppRepository {
     private final PackageManager mPackageManager;
     private final HiddenPackages mHiddenPackages;
 
-    private final PublishSubject<Void> mUpdateSubject = PublishSubject.create();
+    private final PublishRelay<Void> mUpdateSubject = PublishRelay.create();
 
     public SharedPrefsAppRepository(PackageManager packageManager, RxSharedPreferences rxPrefs) {
         this(packageManager, new HiddenPackages(rxPrefs));
@@ -88,7 +88,7 @@ public class SharedPrefsAppRepository implements AppRepository {
             newHidden.add(appPackage);
             mHiddenPackages.set(newHidden);
 
-            mUpdateSubject.onNext(null);
+            mUpdateSubject.call(null);
         }
     }
 
@@ -110,7 +110,7 @@ public class SharedPrefsAppRepository implements AppRepository {
             newHidden.remove(appPackage);
             mHiddenPackages.set(newHidden);
 
-            mUpdateSubject.onNext(null);
+            mUpdateSubject.call(null);
         }
     }
 }
