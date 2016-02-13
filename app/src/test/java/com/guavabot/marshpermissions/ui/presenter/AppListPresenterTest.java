@@ -4,6 +4,7 @@ import com.guavabot.marshpermissions.TestSchedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
+import com.guavabot.marshpermissions.ui.view.AppListViewModel;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,17 +32,16 @@ public class AppListPresenterTest {
 
     private AppListPresenter mTested;
 
-    @Mock
-    private AppListView mAppListView;
-    @Mock
-    private GetAppListFilteredUseCase mGetAppListFilteredUseCase;
-    @Mock
-    private ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
+    @Mock AppListView mAppListView;
+    @Mock GetAppListFilteredUseCase mGetAppListFilteredUseCase;
+    @Mock ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
+    @Mock AppListViewModel mAppListViewModel;
+
     private static final String PACKAGE = "com.my.package";
 
     @Before
     public void setUp() throws Exception {
-        mTested = new AppListPresenter(mAppListView, mGetAppListFilteredUseCase, mToggleAppHiddenUseCase,
+        mTested = new AppListPresenter(mAppListView, mAppListViewModel, mGetAppListFilteredUseCase, mToggleAppHiddenUseCase,
                 new TestSchedulers());
 
         given(mAppListView.getPackageFilter()).willReturn(Observable.just(""));
@@ -67,7 +67,7 @@ public class AppListPresenterTest {
         mTested.onStart();
 
         verify(mAppListView).getPackageFilter();
-        verify(mAppListView).setItems(apps);
+        verify(mAppListViewModel).setApps(apps);
     }
 
     @Test

@@ -18,7 +18,7 @@ import javax.inject.Inject;
  * Adapter for a list of apps with a button.
  */
 @ActivityScope
-class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
+class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> implements ListAdapter<App> {
 
     private final AppListPresenter mAppListPresenter;
 
@@ -43,8 +43,9 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
         holder.bind(app);
     }
 
-    void setItems(List<App> apps) {
-        if (!apps.equals(mApps)) {
+    @Override
+    public void setItems(List<App> apps) {
+        if (apps != null) {
             mApps = apps;
             notifyDataSetChanged();
         }

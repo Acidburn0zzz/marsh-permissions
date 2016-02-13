@@ -5,6 +5,7 @@ import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.injection.ActivityScope;
+import com.guavabot.marshpermissions.ui.view.AppListViewModel;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ import rx.subscriptions.CompositeSubscription;
 public class AppListPresenter implements Presenter {
 
     private final AppListView mAppListView;
+    private final AppListViewModel mAppListViewModel;
     private final GetAppListFilteredUseCase mGetAppListFilteredUseCase;
     private final ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
     private final Schedulers mSchedulers;
@@ -28,10 +30,12 @@ public class AppListPresenter implements Presenter {
     private CompositeSubscription mSubscriptions;
 
     @Inject
-    public AppListPresenter(AppListView appListView, GetAppListFilteredUseCase getAppListFilteredUseCase,
+    public AppListPresenter(AppListView appListView, AppListViewModel appListViewModel,
+                            GetAppListFilteredUseCase getAppListFilteredUseCase,
                             ToggleAppHiddenUseCase toggleAppHiddenUseCase,
                             Schedulers schedulers) {
         mAppListView = appListView;
+        mAppListViewModel = appListViewModel;
         mGetAppListFilteredUseCase = getAppListFilteredUseCase;
         mToggleAppHiddenUseCase = toggleAppHiddenUseCase;
         mSchedulers = schedulers;
@@ -47,7 +51,7 @@ public class AppListPresenter implements Presenter {
                 .subscribe(new Action1<List<App>>() {
                     @Override
                     public void call(List<App> apps) {
-                        mAppListView.setItems(apps);
+                        mAppListViewModel.setApps(apps);
                     }
                 }));
     }

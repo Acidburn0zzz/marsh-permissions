@@ -2,19 +2,18 @@ package com.guavabot.marshpermissions.ui.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import com.guavabot.marshpermissions.R;
-import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.injection.AppListComponent;
 import com.guavabot.marshpermissions.injection.AppListModule;
 import com.guavabot.marshpermissions.injection.DaggerAppListComponent;
@@ -23,8 +22,6 @@ import com.guavabot.marshpermissions.ui.presenter.AppListView;
 import com.guavabot.marshpermissions.ui.presenter.Presenter;
 import com.guavabot.marshpermissions.ui.widget.DividerItemDecoration;
 import com.jakewharton.rxbinding.widget.RxSearchView;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,21 +39,24 @@ public class AppListActivity extends BaseActivity implements AppListView {
     AppListPresenter mAppListPresenter;
     @Inject
     AppListAdapter mAdapter;
+    @Inject
+    AppListViewModel mAppListViewModel;
 
     private final PublishSubject<SearchView> mSearchViewSubject = PublishSubject.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         inject();
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this));
-        recyclerView.setAdapter(mAdapter);
+        AppListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setAppListViewModel(mAppListViewModel);
+
+        binding.recycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.recycler.setHasFixedSize(true);
+        binding.recycler.addItemDecoration(new DividerItemDecoration(this));
+        binding.recycler.setAdapter(mAdapter);
     }
 
     private void inject() {
@@ -121,11 +121,6 @@ public class AppListActivity extends BaseActivity implements AppListView {
         Uri uri = Uri.fromParts("package", packageName, null);
         intent.setData(uri);
         startActivity(intent);
-    }
-
-    @Override
-    public void setItems(List<App> apps) {
-        mAdapter.setItems(apps);
     }
 
     @Override
