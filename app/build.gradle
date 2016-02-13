@@ -22,6 +22,10 @@ android {
             applicationIdSuffix ".debug"
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {

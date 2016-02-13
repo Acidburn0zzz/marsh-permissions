@@ -2,11 +2,10 @@ package com.guavabot.marshpermissions.ui.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.guavabot.marshpermissions.R;
+import com.guavabot.marshpermissions.databinding.ListItemBinding;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.injection.ActivityScope;
 import com.guavabot.marshpermissions.ui.presenter.AppListPresenter;
@@ -16,7 +15,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -27,7 +25,6 @@ import butterknife.OnClick;
 class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
 
     private final AppListPresenter mAppListPresenter;
-    private final ThemeTextColors mTextColors = new ThemeTextColors();
 
     private List<App> mApps = Collections.emptyList();
 
@@ -40,14 +37,17 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.list_item, parent, false);
-        return new Holder(view);
+        ListItemBinding binding = ListItemBinding.inflate(inflater, parent, false);
+        return new Holder(binding);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
         App app = getItem(position);
         holder.bind(app);
+
+        ListItemBinding binding = holder.getBinding();
+        binding.setApp(app);
     }
 
     void setItems(List<App> apps) {
@@ -73,22 +73,22 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
 
     class Holder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.app_text)
-        TextView mText1;
-        @Bind(R.id.app_button)
-        TextView mHideBtn;
+        private final ListItemBinding mBinding;
+
         private App mApp;
 
-        public Holder(View itemView) {
-            super(itemView);
+        public Holder(ListItemBinding binding) {
+            super(binding.getRoot());
+            mBinding = binding;
             ButterKnife.bind(this, itemView);
+        }
+
+        public ListItemBinding getBinding() {
+            return mBinding;
         }
 
         public void bind(App app) {
             mApp = app;
-            mText1.setText(app.getPackage());
-            mText1.setTextColor(app.isHidden() ? mTextColors.getColorSecondary(mText1) : mTextColors.getColorPrimary(mText1));
-            mHideBtn.setText(app.isHidden() ? R.string.app_btn_unhide : R.string.app_btn_hide);
         }
 
         @OnClick(R.id.app_frame)
