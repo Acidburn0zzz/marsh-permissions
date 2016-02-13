@@ -2,10 +2,9 @@ package com.guavabot.marshpermissions.ui.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
-import com.guavabot.marshpermissions.R;
-import com.guavabot.marshpermissions.databinding.ListItemBinding;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.injection.ActivityScope;
 import com.guavabot.marshpermissions.ui.presenter.AppListPresenter;
@@ -14,9 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Adapter for a list of apps with a button.
@@ -45,9 +41,6 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
     public void onBindViewHolder(Holder holder, int position) {
         App app = getItem(position);
         holder.bind(app);
-
-        ListItemBinding binding = holder.getBinding();
-        binding.setApp(app);
     }
 
     void setItems(List<App> apps) {
@@ -75,30 +68,23 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> {
 
         private final ListItemBinding mBinding;
 
-        private App mApp;
-
-        public Holder(ListItemBinding binding) {
+        Holder(ListItemBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
-            ButterKnife.bind(this, itemView);
+            mBinding.setHandler(this);
         }
 
-        public ListItemBinding getBinding() {
-            return mBinding;
+        void bind(App app) {
+            mBinding.setApp(app);
+            mBinding.executePendingBindings();
         }
 
-        public void bind(App app) {
-            mApp = app;
+        public void onItemClick(@SuppressWarnings("UnusedParameters") View view) {
+            mAppListPresenter.onItemClicked(mBinding.getApp());
         }
 
-        @OnClick(R.id.app_frame)
-        void onItemClick() {
-            mAppListPresenter.onItemClicked(mApp);
-        }
-
-        @OnClick(R.id.app_button)
-        void onButtonClick() {
-            mAppListPresenter.onItemButtonClicked(mApp);
+        public void onButtonClick(@SuppressWarnings("UnusedParameters") View view) {
+            mAppListPresenter.onItemButtonClicked(mBinding.getApp());
         }
     }
 }
