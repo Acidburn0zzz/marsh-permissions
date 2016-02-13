@@ -1,6 +1,5 @@
 package com.guavabot.marshpermissions.domain.interactor;
 
-import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 
 import rx.Observable;
@@ -16,11 +15,11 @@ public class ToggleAppHiddenUseCase implements UseCase {
         mAppRepository = appRepository;
     }
 
-    public Observable<Void> execute(App app) {
-        if (app.isHidden()) {
-            return mAppRepository.setAppNotHidden(app.getPackage());
+    public Observable<Void> execute(String appPackage, boolean hidden) {
+        if (hidden) {
+            return mAppRepository.setAppHidden(appPackage);
         } else {
-            return mAppRepository.setAppHidden(app.getPackage());
+            return mAppRepository.setAppNotHidden(appPackage);
         }
     }
 

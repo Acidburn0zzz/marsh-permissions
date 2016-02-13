@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <data class=".ui.view.ListItemBinding">
-        <variable name="app" type="com.guavabot.marshpermissions.domain.entity.App"/>
+        <variable name="app" type="com.guavabot.marshpermissions.ui.view.AppViewModel"/>
         <variable name="handler" type="com.guavabot.marshpermissions.ui.view.AppListAdapter.Holder"/>
     </data>
 <LinearLayout
@@ -25,7 +25,7 @@
         android:paddingEnd="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         tools:text="com.guavabot.app"
-        android:text="@{app.package}"
+        android:text="@{app.name}"
         android:textColor="@{app.hidden ? @color/textColorSecondary : @color/textColorPrimary}"
         />
 

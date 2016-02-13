@@ -1,12 +1,16 @@
 package com.guavabot.marshpermissions.ui.presenter;
 
+import android.support.annotation.NonNull;
+
 import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.injection.ActivityScope;
 import com.guavabot.marshpermissions.ui.view.AppListViewModel;
+import com.guavabot.marshpermissions.ui.view.AppViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,8 +30,7 @@ public class AppListPresenter implements Presenter {
     private final GetAppListFilteredUseCase mGetAppListFilteredUseCase;
     private final ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
     private final Schedulers mSchedulers;
-
-    private CompositeSubscription mSubscriptions;
+    private final CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     @Inject
     public AppListPresenter(AppListView appListView, AppListViewModel appListViewModel,
@@ -43,7 +46,6 @@ public class AppListPresenter implements Presenter {
 
     @Override
     public void onStart() {
-        mSubscriptions = new CompositeSubscription();
         Observable<String> packageFilterStream = mAppListView.getPackageFilter();
         mSubscriptions.add(mGetAppListFilteredUseCase.execute(packageFilterStream)
                 .subscribeOn(mSchedulers.io())
@@ -51,28 +53,43 @@ public class AppListPresenter implements Presenter {
                 .subscribe(new Action1<List<App>>() {
                     @Override
                     public void call(List<App> apps) {
-                        mAppListViewModel.setApps(apps);
+                        List<AppViewModel> viewModelApps = map(apps);
+                        mAppListViewModel.setApps(viewModelApps);
                     }
                 }));
     }
 
+    @NonNull
+    private List<AppViewModel> map(List<App> apps) {
+        List<AppViewModel> viewModelApps = new ArrayList<>();
+        for (App app : apps) {
+            viewModelApps.add(map(app));
+        }
+        return viewModelApps;
+    }
+
+    private AppViewModel map(App app) {
+        return new AppViewModel(app.getPackage(), app.isHidden());
+    }
+
     @Override
     public void onStop() {
-        mSubscriptions.unsubscribe();
+        mSubscriptions.clear();
     }
 
     /**
      * An app item was clicked.
      */
-    public void onItemClicked(App app) {
-        mAppListView.startAppInfo(app.getPackage());
+    public void onItemClicked(AppViewModel app) {
+        mAppListView.startAppInfo(app.getName());
     }
 
     /**
      * The button for an item was clicked.
      */
-    public void onItemButtonClicked(App app) {
-        mToggleAppHiddenUseCase.execute(app)
+    public void onItemButtonClicked(AppViewModel app) {
+        app.toggleHidden();
+        mToggleAppHiddenUseCase.execute(app.getName(), app.isHidden())
                 .subscribeOn(mSchedulers.io())
                 .subscribe();
     }

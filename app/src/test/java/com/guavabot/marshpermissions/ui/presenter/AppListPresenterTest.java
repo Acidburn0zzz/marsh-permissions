@@ -1,12 +1,13 @@
 package com.guavabot.marshpermissions.ui.presenter;
 
 import com.guavabot.marshpermissions.TestSchedulers;
+import com.guavabot.marshpermissions.data.AppImpl;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.ui.view.AppListViewModel;
+import com.guavabot.marshpermissions.ui.view.AppViewModel;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,12 +20,10 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.android.plugins.RxAndroidPlugins;
 import rx.functions.Action0;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -47,44 +46,36 @@ public class AppListPresenterTest {
         given(mAppListView.getPackageFilter()).willReturn(Observable.just(""));
     }
 
-    @After
-    public void tearDown() {
-        RxAndroidPlugins.getInstance().reset();
-    }
-
     @Test
     public void shouldLoadAndSetItemsOnStart() throws Exception {
-        final List<App> apps = new ArrayList<>();
-        apps.add(mock(App.class));
         given(mGetAppListFilteredUseCase.execute(Matchers.<Observable<String>>any()))
                 .willReturn(Observable.create(new Observable.OnSubscribe<List<App>>() {
                     @Override
                     public void call(Subscriber<? super List<App>> subscriber) {
-                        subscriber.onNext(apps);
+                        subscriber.onNext(getFakeApps());
                     }
                 }));
 
         mTested.onStart();
 
         verify(mAppListView).getPackageFilter();
-        verify(mAppListViewModel).setApps(apps);
+        verify(mAppListViewModel).setApps(getFakeViewModels());
     }
 
     @Test
     public void shouldStartAppInfoWhenItemClicked() throws Exception {
-        App app = mock(App.class);
-        given(app.getPackage()).willReturn(PACKAGE);
+        AppViewModel app = getFakeViewModels().get(0);
 
         mTested.onItemClicked(app);
 
-        verify(mAppListView).startAppInfo(PACKAGE);
+        verify(mAppListView).startAppInfo(app.getName());
     }
 
     @Test
     public void shouldToggleAppHiddenWhenItemButtonClicked() throws Exception {
+        AppViewModel app = getFakeViewModels().get(0);
         final boolean[] subscribed = {false};
-        App app = mock(App.class);
-        given(mToggleAppHiddenUseCase.execute(app))
+        given(mToggleAppHiddenUseCase.execute(app.getName(), true))
                 .willReturn(Observable.just((Void) null)
                         .doOnSubscribe(new Action0() {
                             @Override
@@ -95,8 +86,23 @@ public class AppListPresenterTest {
 
         mTested.onItemButtonClicked(app);
 
-        verify(mToggleAppHiddenUseCase).execute(app);
+        verify(mToggleAppHiddenUseCase).execute(app.getName(), true);
         assertThat(subscribed[0]).isTrue();
     }
 
+    private List<App> getFakeApps() {
+        List<App> apps = new ArrayList<>();
+        apps.add(new AppImpl(PACKAGE, false));
+        apps.add(new AppImpl(PACKAGE + "2", true));
+        apps.add(new AppImpl(PACKAGE + "3", false));
+        return apps;
+    }
+
+    private List<AppViewModel> getFakeViewModels() {
+        List<AppViewModel> apps = new ArrayList<>();
+        apps.add(new AppViewModel(PACKAGE, false));
+        apps.add(new AppViewModel(PACKAGE + "2", true));
+        apps.add(new AppViewModel(PACKAGE + "3", false));
+        return apps;
+    }
 }

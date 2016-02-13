@@ -1,6 +1,5 @@
 package com.guavabot.marshpermissions.domain.interactor;
 
-import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 
 import org.junit.Before;
@@ -9,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -20,32 +18,26 @@ public class ToggleAppHiddenUseCaseTest {
 
     @Mock
     private AppRepository mAppRepository;
-    @Mock
-    private App mApp;
 
     private ToggleAppHiddenUseCase mTested;
 
     @Before
     public void setup() {
         mTested = new ToggleAppHiddenUseCase(mAppRepository);
-
-        given(mApp.getPackage()).willReturn("package");
     }
 
     @Test
     public void shouldSetAppHiddenWhenNotHidden() {
-        given(mApp.isHidden()).willReturn(false);
 
-        mTested.execute(mApp);
+        mTested.execute("package", true);
 
         verify(mAppRepository).setAppHidden("package");
     }
 
     @Test
     public void shouldSetAppNotHiddenWhenHidden() {
-        given(mApp.isHidden()).willReturn(true);
 
-        mTested.execute(mApp);
+        mTested.execute("package", false);
 
         verify(mAppRepository).setAppNotHidden("package");
     }

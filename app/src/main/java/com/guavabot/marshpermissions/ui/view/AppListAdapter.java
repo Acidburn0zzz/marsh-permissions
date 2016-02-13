@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.injection.ActivityScope;
 import com.guavabot.marshpermissions.ui.presenter.AppListPresenter;
 
@@ -18,11 +17,11 @@ import javax.inject.Inject;
  * Adapter for a list of apps with a button.
  */
 @ActivityScope
-class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> implements ListAdapter<App> {
+class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> implements ListAdapter<AppViewModel> {
 
     private final AppListPresenter mAppListPresenter;
 
-    private List<App> mApps = Collections.emptyList();
+    private List<AppViewModel> mApps = Collections.emptyList();
 
     @Inject
     AppListAdapter(AppListPresenter appListPresenter) {
@@ -39,25 +38,25 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> impleme
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        App app = getItem(position);
+        AppViewModel app = getItem(position);
         holder.bind(app);
     }
 
     @Override
-    public void setItems(List<App> apps) {
+    public void setItems(List<AppViewModel> apps) {
         if (apps != null) {
             mApps = apps;
             notifyDataSetChanged();
         }
     }
 
-    App getItem(int position) {
+    AppViewModel getItem(int position) {
         return mApps.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getPackage().hashCode();
+        return getItem(position).getName().hashCode();
     }
 
     @Override
@@ -75,7 +74,7 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> impleme
             mBinding.setHandler(this);
         }
 
-        void bind(App app) {
+        void bind(AppViewModel app) {
             mBinding.setApp(app);
             mBinding.executePendingBindings();
         }
