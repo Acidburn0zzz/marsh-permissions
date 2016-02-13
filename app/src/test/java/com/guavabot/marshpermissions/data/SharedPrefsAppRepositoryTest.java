@@ -73,7 +73,7 @@ public class SharedPrefsAppRepositoryTest {
         subscriber.assertValueCount(1);
         subscriber.assertCompleted();
         List<App> result = subscriber.getOnNextEvents().get(0);
-        assertThat(result).containsOnly(new AppImpl("package2", true), new AppImpl("package3", false));
+        assertThat(result).containsOnly(new App("package2", true), new App("package3", false));
     }
 
     @Test

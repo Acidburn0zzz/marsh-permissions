@@ -1,7 +1,6 @@
 package com.guavabot.marshpermissions.ui.presenter;
 
 import com.guavabot.marshpermissions.TestSchedulers;
-import com.guavabot.marshpermissions.data.AppImpl;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
@@ -92,9 +91,9 @@ public class AppListPresenterTest {
 
     private List<App> getFakeApps() {
         List<App> apps = new ArrayList<>();
-        apps.add(new AppImpl(PACKAGE, false));
-        apps.add(new AppImpl(PACKAGE + "2", true));
-        apps.add(new AppImpl(PACKAGE + "3", false));
+        apps.add(new App(PACKAGE, false));
+        apps.add(new App(PACKAGE + "2", true));
+        apps.add(new App(PACKAGE + "3", false));
         return apps;
     }
 

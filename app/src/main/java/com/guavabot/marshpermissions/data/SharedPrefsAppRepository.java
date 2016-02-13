@@ -54,7 +54,7 @@ public class SharedPrefsAppRepository implements AppRepository {
         List<ApplicationInfo> appInfos = getApplicationInfos();
         for (ApplicationInfo app : appInfos) {
             if (app.targetSdkVersion >= 23) {
-                apps.add(new AppImpl(app.packageName, hidden.contains(app.packageName)));
+                apps.add(new App(app.packageName, hidden.contains(app.packageName)));
             }
         }
 
