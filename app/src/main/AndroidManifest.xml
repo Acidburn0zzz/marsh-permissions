@@ -9,16 +9,16 @@
         android:name=".AndroidApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.view.AppListActivity">
+        <activity android:name=".ui.app_list.AppListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.view.SettingsActivity"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.view.AppListActivity">
+            android:parentActivityName=".ui.app_list.AppListActivity">
         </activity>
     </application>
 

@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.ui.view;
+package com.guavabot.marshpermissions.ui.app_list;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +14,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import com.guavabot.marshpermissions.R;
-import com.guavabot.marshpermissions.injection.AppListComponent;
-import com.guavabot.marshpermissions.injection.AppListModule;
-import com.guavabot.marshpermissions.injection.DaggerAppListComponent;
-import com.guavabot.marshpermissions.ui.presenter.AppListPresenter;
-import com.guavabot.marshpermissions.ui.presenter.AppListView;
-import com.guavabot.marshpermissions.ui.presenter.Presenter;
+import com.guavabot.marshpermissions.ui.BaseActivity;
+import com.guavabot.marshpermissions.ui.Presenter;
+import com.guavabot.marshpermissions.ui.settings.SettingsActivity;
 import com.guavabot.marshpermissions.ui.widget.DividerItemDecoration;
 import com.jakewharton.rxbinding.widget.RxSearchView;
 
@@ -50,7 +47,7 @@ public class AppListActivity extends BaseActivity implements AppListView {
 
         inject();
 
-        AppListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        AppListBinding binding = DataBindingUtil.setContentView(this, R.layout.app_list);
         binding.setAppListViewModel(mAppListViewModel);
 
         binding.recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -115,6 +112,7 @@ public class AppListActivity extends BaseActivity implements AppListView {
         SettingsActivity.start(this);
     }
 
+    @Override
     public void startAppInfo(String packageName) {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);

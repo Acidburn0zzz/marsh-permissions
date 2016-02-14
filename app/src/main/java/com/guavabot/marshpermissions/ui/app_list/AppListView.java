@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.ui.presenter;
+package com.guavabot.marshpermissions.ui.app_list;
 
 import rx.Observable;
 

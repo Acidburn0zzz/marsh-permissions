@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.ui.view;
+package com.guavabot.marshpermissions.ui.app_list;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -11,12 +11,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 @ActivityScope
-public class AppListViewModel extends BaseObservable {
+class AppListViewModel extends BaseObservable {
 
     private List<AppViewModel> mApps;
 
     @Inject
-    public AppListViewModel() {
+    AppListViewModel() {
     }
 
     @Bindable

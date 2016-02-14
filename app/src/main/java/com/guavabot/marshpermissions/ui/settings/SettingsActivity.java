@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.ui.view;
+package com.guavabot.marshpermissions.ui.settings;
 
 import android.content.Context;
 import android.content.Intent;

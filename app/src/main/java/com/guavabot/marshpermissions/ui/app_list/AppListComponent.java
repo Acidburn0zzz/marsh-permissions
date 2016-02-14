@@ -1,6 +1,8 @@
-package com.guavabot.marshpermissions.injection;
+package com.guavabot.marshpermissions.ui.app_list;
 
-import com.guavabot.marshpermissions.ui.view.AppListActivity;
+import com.guavabot.marshpermissions.injection.ActivityModule;
+import com.guavabot.marshpermissions.injection.ActivityScope;
+import com.guavabot.marshpermissions.injection.ApplicationComponent;
 
 import dagger.Component;
 

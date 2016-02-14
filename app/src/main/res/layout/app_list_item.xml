@@ -2,9 +2,9 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <data class=".ui.view.ListItemBinding">
-        <variable name="app" type="com.guavabot.marshpermissions.ui.view.AppViewModel"/>
-        <variable name="handler" type="com.guavabot.marshpermissions.ui.view.AppListAdapter.Holder"/>
+    <data class=".ui.app_list.AppListItemBinding">
+        <variable name="app" type="com.guavabot.marshpermissions.ui.app_list.AppViewModel"/>
+        <variable name="handler" type="com.guavabot.marshpermissions.ui.app_list.AppListAdapter.Holder"/>
     </data>
 <LinearLayout
     android:layout_width="match_parent"

@@ -1,11 +1,9 @@
-package com.guavabot.marshpermissions.ui.presenter;
+package com.guavabot.marshpermissions.ui.app_list;
 
 import com.guavabot.marshpermissions.TestSchedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
-import com.guavabot.marshpermissions.ui.view.AppListViewModel;
-import com.guavabot.marshpermissions.ui.view.AppViewModel;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.ui.presenter;
+package com.guavabot.marshpermissions.ui.app_list;
 
 import android.support.annotation.NonNull;
 
@@ -7,8 +7,7 @@ import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
 import com.guavabot.marshpermissions.injection.ActivityScope;
-import com.guavabot.marshpermissions.ui.view.AppListViewModel;
-import com.guavabot.marshpermissions.ui.view.AppViewModel;
+import com.guavabot.marshpermissions.ui.Presenter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,17 +1,17 @@
-package com.guavabot.marshpermissions.ui.view;
+package com.guavabot.marshpermissions.ui.app_list;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import com.guavabot.marshpermissions.BR;
 
-public class AppViewModel extends BaseObservable {
+class AppViewModel extends BaseObservable {
 
     private final String mName;
 
     private boolean mHidden;
 
-    public AppViewModel(String name, boolean hidden) {
+    AppViewModel(String name, boolean hidden) {
         mName = name;
         mHidden = hidden;
     }
@@ -25,7 +25,7 @@ public class AppViewModel extends BaseObservable {
         return mHidden;
     }
 
-    public void toggleHidden() {
+    void toggleHidden() {
         mHidden = !mHidden;
         notifyPropertyChanged(BR.hidden);
     }

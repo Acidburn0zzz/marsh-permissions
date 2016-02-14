@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.ui.view;
+package com.guavabot.marshpermissions.ui.app_list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.guavabot.marshpermissions.injection.ActivityScope;
-import com.guavabot.marshpermissions.ui.presenter.AppListPresenter;
+import com.guavabot.marshpermissions.ui.ListAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,7 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> impleme
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ListItemBinding binding = ListItemBinding.inflate(inflater, parent, false);
+        AppListItemBinding binding = AppListItemBinding.inflate(inflater, parent, false);
         return new Holder(binding);
     }
 
@@ -66,9 +66,9 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> impleme
 
     class Holder extends RecyclerView.ViewHolder {
 
-        private final ListItemBinding mBinding;
+        private final AppListItemBinding mBinding;
 
-        Holder(ListItemBinding binding) {
+        Holder(AppListItemBinding binding) {
             super(binding.getRoot());
             mBinding = binding;
             mBinding.setHandler(this);

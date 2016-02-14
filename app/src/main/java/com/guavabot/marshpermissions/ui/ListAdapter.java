@@ -1,4 +1,4 @@
-package com.guavabot.marshpermissions.ui.view;
+package com.guavabot.marshpermissions.ui;
 
 import java.util.List;
 

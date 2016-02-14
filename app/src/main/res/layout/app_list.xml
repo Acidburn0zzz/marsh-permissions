@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <data class=".ui.view.AppListBinding">
-        <variable name="appListViewModel" type="com.guavabot.marshpermissions.ui.view.AppListViewModel"/>
+    <data class=".ui.app_list.AppListBinding">
+        <variable name="appListViewModel" type="com.guavabot.marshpermissions.ui.app_list.AppListViewModel"/>
     </data>
 <android.support.v7.widget.RecyclerView
     android:id="@+id/recycler"
@@ -13,5 +13,5 @@
     android:layout_height="match_parent"
     android:scrollbars="vertical"
     app:items="@{appListViewModel.apps}"
-    tools:context=".ui.view.AppListActivity"/>
+    tools:context=".ui.app_list.AppListActivity"/>
 </layout>

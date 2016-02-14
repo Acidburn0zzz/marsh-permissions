@@ -1,23 +1,15 @@
-package com.guavabot.marshpermissions.ui.view;
+package com.guavabot.marshpermissions.ui;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.guavabot.marshpermissions.AndroidApplication;
 import com.guavabot.marshpermissions.injection.ActivityModule;
 import com.guavabot.marshpermissions.injection.ApplicationComponent;
-import com.guavabot.marshpermissions.ui.presenter.Presenter;
 
 /**
  * Base for all activities to extend.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getApplicationComponent().inject(this);
-    }
 
     /**
      * Get the Main Application component for dependency injection.
