@@ -45,18 +45,19 @@ public class AppListPresenterTest {
 
     @Test
     public void shouldLoadAndSetItemsOnStart() throws Exception {
+        final List<App> fakeApps = getFakeApps();
         given(mGetAppListFilteredUseCase.execute(Matchers.<Observable<String>>any()))
                 .willReturn(Observable.create(new Observable.OnSubscribe<List<App>>() {
                     @Override
                     public void call(Subscriber<? super List<App>> subscriber) {
-                        subscriber.onNext(getFakeApps());
+                        subscriber.onNext(fakeApps);
                     }
                 }));
 
         mTested.onStart();
 
         verify(mAppListView).getPackageFilter();
-        verify(mAppListViewModel).setApps(getFakeViewModels());
+        verify(mAppListViewModel).setApps(new AppListPresenter.Mapper().call(fakeApps));
     }
 
     @Test
@@ -85,6 +86,16 @@ public class AppListPresenterTest {
 
         verify(mToggleAppHiddenUseCase).execute(app.getName(), true);
         assertThat(subscribed[0]).isTrue();
+    }
+
+    @Test
+    public void shouldMapCorrectly() {
+        List<App> apps = getFakeApps();
+        AppListPresenter.Mapper mapper = new AppListPresenter.Mapper();
+
+        List<AppViewModel> result = mapper.call(apps);
+
+        assertThat(result).isEqualTo(getFakeViewModels());
     }
 
     private List<App> getFakeApps() {
