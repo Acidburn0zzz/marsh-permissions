@@ -23,8 +23,6 @@ import com.jakewharton.rxbinding.widget.RxSearchView;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.functions.Action0;
-import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 /**
@@ -124,23 +122,8 @@ public class AppListActivity extends BaseActivity implements AppListView {
     @Override
     public Observable<String> getPackageFilter() {
         return mSearchViewSubject.asObservable()
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        supportInvalidateOptionsMenu();
-                    }
-                })
-                .flatMap(new Func1<SearchView, Observable<CharSequence>>() {
-                    @Override
-                    public Observable<CharSequence> call(final SearchView view) {
-                        return RxSearchView.queryTextChanges(view);
-                    }
-                })
-                .map(new Func1<CharSequence, String>() {
-                    @Override
-                    public String call(CharSequence text) {
-                        return text.toString();
-                    }
-                });
+                .doOnSubscribe(() -> supportInvalidateOptionsMenu())
+                .flatMap(searchView -> RxSearchView.queryTextChanges(searchView))
+                .map((text) -> text.toString());
     }
 }

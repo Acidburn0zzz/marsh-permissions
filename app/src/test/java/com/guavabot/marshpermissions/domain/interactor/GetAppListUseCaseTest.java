@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.functions.Func1;
 import rx.observers.TestSubscriber;
 import rx.schedulers.TestScheduler;
 
@@ -75,13 +74,10 @@ public class GetAppListUseCaseTest {
         TestScheduler scheduler = new TestScheduler();
         given(mAppRepository.hiddenAppsUpdate()).willReturn(
                 Observable.interval(1, TimeUnit.SECONDS, scheduler)
-                        .flatMap(new Func1<Long, Observable<Void>>() {
-                            @Override
-                            public Observable<Void> call(Long aLong) {
-                                //change list of apps to return from repository
-                                given(mAppRepository.findAppsMarshmallow()).willReturn(Observable.just(mList1));
-                                return Observable.just(null);
-                            }
+                        .flatMap(aLong -> {
+                            //change list of apps to return from repository
+                            given(mAppRepository.findAppsMarshmallow()).willReturn(Observable.just(mList1));
+                            return Observable.just(null);
                         }));
 
         TestSubscriber<List<App>> subscriber = new TestSubscriber<>();
@@ -102,12 +98,9 @@ public class GetAppListUseCaseTest {
         TestScheduler scheduler = new TestScheduler();
         given(mAppSettings.isDisplayGoogle()).willReturn(
                 Observable.interval(1, TimeUnit.SECONDS, scheduler)
-                        .flatMap(new Func1<Long, Observable<Boolean>>() {
-                            @Override
-                            public Observable<Boolean> call(Long aLong) {
-                                //change setting to display Google
-                                return Observable.just(true);
-                            }
+                        .flatMap(aLong -> {
+                            //change setting to display Google
+                            return Observable.just(true);
                         })
                         .startWith(false) //start not displaying Google
         );
@@ -130,12 +123,9 @@ public class GetAppListUseCaseTest {
         TestScheduler scheduler = new TestScheduler();
         given(mAppSettings.isDisplayAndroid()).willReturn(
                 Observable.interval(1, TimeUnit.SECONDS, scheduler)
-                        .flatMap(new Func1<Long, Observable<Boolean>>() {
-                            @Override
-                            public Observable<Boolean> call(Long aLong) {
-                                //change setting to display Android
-                                return Observable.just(true);
-                            }
+                        .flatMap(aLong -> {
+                            //change setting to display Android
+                            return Observable.just(true);
                         })
                         .startWith(false) //start not displaying Android
         );
@@ -158,12 +148,9 @@ public class GetAppListUseCaseTest {
         TestScheduler scheduler = new TestScheduler();
         given(mAppSettings.isDisplayHidden()).willReturn(
                 Observable.interval(1, TimeUnit.SECONDS, scheduler)
-                        .flatMap(new Func1<Long, Observable<Boolean>>() {
-                            @Override
-                            public Observable<Boolean> call(Long aLong) {
-                                //change setting to display hidden
-                                return Observable.just(true);
-                            }
+                        .flatMap(aLong -> {
+                            //change setting to display hidden
+                            return Observable.just(true);
                         })
                         .startWith(false) //start not displaying hidden apps
         );

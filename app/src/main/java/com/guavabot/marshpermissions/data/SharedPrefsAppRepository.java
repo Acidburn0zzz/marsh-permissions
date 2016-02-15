@@ -4,18 +4,18 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 import com.jakewharton.rxrelay.PublishRelay;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import rx.Observable;
-import rx.functions.Func0;
 
 /**
  * {@link AppRepository} that retrieves installed apps from the PackageManager and
@@ -39,26 +39,16 @@ public class SharedPrefsAppRepository implements AppRepository {
 
     @Override
     public Observable<List<App>> findAppsMarshmallow() {
-        return Observable.defer(new Func0<Observable<List<App>>>() {
-            @Override
-            public Observable<List<App>> call() {
-                return Observable.just(doFindAppsMarshmallow());
-            }
-        });
+        return Observable.defer(() -> Observable.just(doFindAppsMarshmallow()));
     }
 
     private List<App> doFindAppsMarshmallow() {
-        List<App> apps = new ArrayList<>();
-
         Set<String> hidden = mHiddenPackages.get();
         List<ApplicationInfo> appInfos = getApplicationInfos();
-        for (ApplicationInfo app : appInfos) {
-            if (app.targetSdkVersion >= 23) {
-                apps.add(new App(app.packageName, hidden.contains(app.packageName)));
-            }
-        }
-
-        return apps;
+        return Stream.of(appInfos)
+                .filter(appInfo -> appInfo.targetSdkVersion >= 23)
+                .map(appInfo -> new App(appInfo.packageName, hidden.contains(appInfo.packageName)))
+                .collect(Collectors.toList());
     }
 
     private List<ApplicationInfo> getApplicationInfos() {
@@ -72,12 +62,9 @@ public class SharedPrefsAppRepository implements AppRepository {
 
     @Override
     public Observable<Void> setAppHidden(final String appPackage) {
-        return Observable.defer(new Func0<Observable<Void>>() {
-            @Override
-            public Observable<Void> call() {
-                doSetAppHidden(appPackage);
-                return Observable.empty();
-            }
+        return Observable.defer(() -> {
+            doSetAppHidden(appPackage);
+            return Observable.empty();
         });
     }
 
@@ -94,12 +81,9 @@ public class SharedPrefsAppRepository implements AppRepository {
 
     @Override
     public Observable<Void> setAppNotHidden(final String appPackage) {
-        return Observable.defer(new Func0<Observable<Void>>() {
-            @Override
-            public Observable<Void> call() {
-                doSetAppNotHidden(appPackage);
-                return Observable.empty();
-            }
+        return Observable.defer(() -> {
+            doSetAppNotHidden(appPackage);
+            return Observable.empty();
         });
     }
 

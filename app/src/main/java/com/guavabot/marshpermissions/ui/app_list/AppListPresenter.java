@@ -13,8 +13,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -30,7 +28,6 @@ public class AppListPresenter implements Presenter {
     private final Schedulers mSchedulers;
 
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
-    private final Mapper mMapper = new Mapper();
 
     @Inject
     public AppListPresenter(AppListView appListView, AppListViewModel appListViewModel,
@@ -48,14 +45,11 @@ public class AppListPresenter implements Presenter {
     public void onStart() {
         Observable<String> packageFilterStream = mAppListView.getPackageFilter();
         mSubscriptions.add(mGetAppListFilteredUseCase.execute(packageFilterStream)
-                .map(mMapper)
+                .map((apps) -> Mapper.map(apps))
                 .subscribeOn(mSchedulers.io())
                 .observeOn(mSchedulers.mainThread())
-                .subscribe(new Action1<List<AppViewModel>>() {
-                    @Override
-                    public void call(List<AppViewModel> apps) {
-                        mAppListViewModel.setApps(apps);
-                    }
+                .subscribe(viewModels -> {
+                    mAppListViewModel.setApps(viewModels);
                 }));
     }
 
@@ -81,10 +75,9 @@ public class AppListPresenter implements Presenter {
                 .subscribe();
     }
 
-    static class Mapper implements Func1<List<App>, List<AppViewModel>> {
+    static class Mapper {
 
-        @Override
-        public List<AppViewModel> call(List<App> apps) {
+        static List<AppViewModel> map(List<App> apps) {
             List<AppViewModel> viewModelApps = new ArrayList<>(apps.size());
             for (App app : apps) {
                 viewModelApps.add(map(app));
@@ -92,7 +85,7 @@ public class AppListPresenter implements Presenter {
             return viewModelApps;
         }
 
-        private AppViewModel map(App app) {
+        static AppViewModel map(App app) {
             return new AppViewModel(app.getPackage(), app.isHidden());
         }
     }

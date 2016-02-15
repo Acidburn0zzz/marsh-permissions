@@ -1,15 +1,14 @@
 package com.guavabot.marshpermissions.domain.interactor;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Func1;
-import rx.functions.Func4;
 
 /**
  * Interactor for retrieving the list of apps that can be shown according to the app settings.
@@ -28,15 +27,10 @@ public class GetAppListUseCase implements UseCase {
      * Returns a hot observable with lists of apps to display.
      */
     public Observable<List<App>> execute() {
-        //The stream will emit new
+        //The stream will emit update events
         return mAppRepository.hiddenAppsUpdate()
                 .startWith((Void) null)
-                .flatMap(new Func1<Void, Observable<List<App>>>() {
-                    @Override
-                    public Observable<List<App>> call(Void s) {
-                        return appsToDisplay();
-                    }
-                });
+                .flatMap(s -> appsToDisplay());
     }
 
     private Observable<List<App>> appsToDisplay() {
@@ -45,20 +39,12 @@ public class GetAppListUseCase implements UseCase {
                 mAppSettings.isDisplayHidden(),
                 mAppSettings.isDisplayGoogle(),
                 mAppSettings.isDisplayAndroid(),
-                new Func4<List<App>, Boolean, Boolean, Boolean, List<App>>() {
-                    @Override
-                    public List<App> call(List<App> appsIn, Boolean hidden, Boolean google, Boolean android) {
-                        List<App> apps = new ArrayList<>();
-                        for (App app : appsIn) {
-                            if ((hidden || !app.isHidden())
-                                    && (google || !app.isGoogleApp())
-                                    && (android || !app.isAndroidApp())) {
-                                apps.add(app);
-                            }
-                        }
-                        return apps;
-                    }
-                }
+                (apps, hidden, google, android) ->
+                        Stream.of(apps)
+                                .filter(app -> (hidden || !app.isHidden())
+                                        && (google || !app.isGoogleApp())
+                                        && (android || !app.isAndroidApp()))
+                                .collect(Collectors.toList())
         );
     }
 }

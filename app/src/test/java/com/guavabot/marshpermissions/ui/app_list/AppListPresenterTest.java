@@ -17,7 +17,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Action0;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -57,7 +56,7 @@ public class AppListPresenterTest {
         mTested.onStart();
 
         verify(mAppListView).getPackageFilter();
-        verify(mAppListViewModel).setApps(new AppListPresenter.Mapper().call(fakeApps));
+        verify(mAppListViewModel).setApps(AppListPresenter.Mapper.map(fakeApps));
     }
 
     @Test
@@ -75,12 +74,7 @@ public class AppListPresenterTest {
         final boolean[] subscribed = {false};
         given(mToggleAppHiddenUseCase.execute(app.getName(), true))
                 .willReturn(Observable.just((Void) null)
-                        .doOnSubscribe(new Action0() {
-                            @Override
-                            public void call() {
-                                subscribed[0] = true;
-                            }
-                        }));
+                        .doOnSubscribe(() -> subscribed[0] = true));
 
         mTested.onItemButtonClicked(app);
 
@@ -91,9 +85,8 @@ public class AppListPresenterTest {
     @Test
     public void shouldMapCorrectly() {
         List<App> apps = getFakeApps();
-        AppListPresenter.Mapper mapper = new AppListPresenter.Mapper();
 
-        List<AppViewModel> result = mapper.call(apps);
+        List<AppViewModel> result = AppListPresenter.Mapper.map(apps);
 
         assertThat(result).isEqualTo(getFakeViewModels());
     }
