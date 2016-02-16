@@ -1,20 +1,36 @@
 package com.guavabot.marshpermissions.domain.entity;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 public class App {
 
     private final String mPackage;
+    private final String mName;
     private final boolean mHidden;
 
-    public App(String aPackage, boolean hidden) {
+    public App(String aPackage, String name, boolean hidden) {
+        if (aPackage == null) throw new NullPointerException();
+
         mPackage = aPackage;
+        mName = name;
         mHidden = hidden;
     }
 
     /**
-     * Application package name.
+     * Application package.
      */
+    @NonNull
     public String getPackage() {
         return mPackage;
+    }
+
+    /**
+     * Application name.
+     */
+    @Nullable
+    public String getName() {
+        return mName;
     }
 
     /**
@@ -45,15 +61,17 @@ public class App {
 
         App app = (App) o;
 
-        //noinspection SimplifiableIfStatement
         if (mHidden != app.mHidden) return false;
-        return mPackage.equals(app.mPackage);
+        //noinspection SimplifiableIfStatement
+        if (!mPackage.equals(app.mPackage)) return false;
+        return !(mName != null ? !mName.equals(app.mName) : app.mName != null);
 
     }
 
     @Override
     public int hashCode() {
         int result = mPackage.hashCode();
+        result = 31 * result + (mName != null ? mName.hashCode() : 0);
         result = 31 * result + (mHidden ? 1 : 0);
         return result;
     }
@@ -62,6 +80,7 @@ public class App {
     public String toString() {
         return "App{" +
                 "mPackage='" + mPackage + '\'' +
+                ", mName='" + mName + '\'' +
                 ", mHidden=" + mHidden +
                 '}';
     }

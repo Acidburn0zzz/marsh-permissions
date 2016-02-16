@@ -56,7 +56,7 @@ class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> impleme
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getName().hashCode();
+        return getItem(position).getPackage().hashCode();
     }
 
     @Override

@@ -47,14 +47,17 @@ public class SharedPrefsAppRepositoryTest {
         ApplicationInfo app1 = new ApplicationInfo();
         app1.targetSdkVersion = 22;
         app1.packageName = "package1";
+        given(mPackageManager.getApplicationLabel(app1)).willReturn("uno");
         list.add(app1);
         ApplicationInfo app2 = new ApplicationInfo();
         app2.targetSdkVersion = 23;
         app2.packageName = "package2";
+        given(mPackageManager.getApplicationLabel(app2)).willReturn("dos");
         list.add(app2);
         ApplicationInfo app3 = new ApplicationInfo();
         app3.targetSdkVersion = 24;
         app3.packageName = "package3";
+        given(mPackageManager.getApplicationLabel(app3)).willReturn(null);
         list.add(app3);
         given(mPackageManager.getInstalledApplications(anyInt()))
                 .willReturn(list);
@@ -73,7 +76,7 @@ public class SharedPrefsAppRepositoryTest {
         subscriber.assertValueCount(1);
         subscriber.assertCompleted();
         List<App> result = subscriber.getOnNextEvents().get(0);
-        assertThat(result).containsOnly(new App("package2", true), new App("package3", false));
+        assertThat(result).containsOnly(new App("package2", "dos", true), new App("package3", null, false));
     }
 
     @Test

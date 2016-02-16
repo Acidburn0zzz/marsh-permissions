@@ -62,7 +62,7 @@ public class AppListPresenter implements Presenter {
      * An app item was clicked.
      */
     public void onItemClicked(AppViewModel app) {
-        mAppListView.startAppInfo(app.getName());
+        mAppListView.startAppInfo(app.getPackage());
     }
 
     /**
@@ -70,7 +70,7 @@ public class AppListPresenter implements Presenter {
      */
     public void onItemButtonClicked(AppViewModel app) {
         app.toggleHidden();
-        mToggleAppHiddenUseCase.execute(app.getName(), app.isHidden())
+        mToggleAppHiddenUseCase.execute(app.getPackage(), app.isHidden())
                 .subscribeOn(mSchedulers.io())
                 .subscribe();
     }
@@ -86,7 +86,7 @@ public class AppListPresenter implements Presenter {
         }
 
         static AppViewModel map(App app) {
-            return new AppViewModel(app.getPackage(), app.isHidden());
+            return new AppViewModel(app.getPackage(), app.getName(), app.isHidden());
         }
     }
 }

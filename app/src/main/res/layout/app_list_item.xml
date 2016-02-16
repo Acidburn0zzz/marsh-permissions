@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <data class=".ui.app_list.AppListItemBinding">
         <variable name="app" type="com.guavabot.marshpermissions.ui.app_list.AppViewModel"/>
         <variable name="handler" type="com.guavabot.marshpermissions.ui.app_list.AppListAdapter.Holder"/>
@@ -16,18 +18,43 @@
     android:onClick="@{handler.onItemClick}"
     >
 
-    <TextView
-        android:id="@+id/app_text"
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="centerInside"
+        tools:src="@drawable/ic_search_24dp"
+        app:icon="@{app.package}"
+        />
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingStart="16dp"
+        android:orientation="vertical"
         android:paddingEnd="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        tools:text="com.guavabot.app"
-        android:text="@{app.name}"
-        android:textColor="@{app.hidden ? @color/textColorSecondary : @color/textColorPrimary}"
-        />
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="My App"
+            android:text="@{app.name}"
+            android:textColor="@{app.hidden ? @color/textColorSecondary : @color/textColorPrimary}"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="com.guavabot.app"
+            android:text="@{app.package}"
+            android:textColor="@{app.hidden ? @color/textColorSecondary : @color/textColorPrimary}"
+            />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/app_button"

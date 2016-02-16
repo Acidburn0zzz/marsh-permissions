@@ -65,20 +65,21 @@ public class AppListPresenterTest {
 
         mTested.onItemClicked(app);
 
-        verify(mAppListView).startAppInfo(app.getName());
+        verify(mAppListView).startAppInfo(app.getPackage());
     }
 
     @Test
     public void shouldToggleAppHiddenWhenItemButtonClicked() throws Exception {
         AppViewModel app = getFakeViewModels().get(0);
+        final boolean hidden = app.isHidden();
         final boolean[] subscribed = {false};
-        given(mToggleAppHiddenUseCase.execute(app.getName(), true))
+        given(mToggleAppHiddenUseCase.execute(app.getPackage(), true))
                 .willReturn(Observable.just((Void) null)
                         .doOnSubscribe(() -> subscribed[0] = true));
 
         mTested.onItemButtonClicked(app);
 
-        verify(mToggleAppHiddenUseCase).execute(app.getName(), true);
+        assertThat(app.isHidden()).isNotEqualTo(hidden);
         assertThat(subscribed[0]).isTrue();
     }
 
@@ -93,17 +94,17 @@ public class AppListPresenterTest {
 
     private List<App> getFakeApps() {
         List<App> apps = new ArrayList<>();
-        apps.add(new App(PACKAGE, false));
-        apps.add(new App(PACKAGE + "2", true));
-        apps.add(new App(PACKAGE + "3", false));
+        apps.add(new App(PACKAGE, "one", false));
+        apps.add(new App(PACKAGE + "2", "two", true));
+        apps.add(new App(PACKAGE + "3", null, false));
         return apps;
     }
 
     private List<AppViewModel> getFakeViewModels() {
         List<AppViewModel> apps = new ArrayList<>();
-        apps.add(new AppViewModel(PACKAGE, false));
-        apps.add(new AppViewModel(PACKAGE + "2", true));
-        apps.add(new AppViewModel(PACKAGE + "3", false));
+        apps.add(new AppViewModel(PACKAGE, "one", false));
+        apps.add(new AppViewModel(PACKAGE + "2", "two", true));
+        apps.add(new AppViewModel(PACKAGE + "3", null, false));
         return apps;
     }
 }
