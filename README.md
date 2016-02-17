@@ -11,10 +11,11 @@ The project follows a [Clean Architecture][1] design. Entities lie at the innerm
  the Android UI, SharedPreferences etc. Inner layers do not depend on outer layers and they only
  reference interfaces which the outer layers can implement.
 
-The presentation layer is organized with the MVP pattern.
+The app uses Android Data Binding. The architecture of the app is based on the MVPVM pattern. The
+Presenter retrieves models from the Business Logic Layer and formats them into a ViewModel which
+just serves for the View to bind to it.
 
-Some libraries used in this project are are Dagger 2 for dependency injection and Rx-Java for 
-reactive programming.
+Dagger 2 is used for dependency injection and Rx-Java is used for reactive functional programming.
 
 Download
 ===
