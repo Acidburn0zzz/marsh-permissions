@@ -69,7 +69,7 @@ public class SharedPrefsAppRepository implements AppRepository {
     public Observable<Void> setAppHidden(final String appPackage) {
         return Observable.defer(() -> {
             doSetAppHidden(appPackage);
-            return Observable.empty();
+            return Observable.just(null);
         });
     }
 
@@ -88,7 +88,7 @@ public class SharedPrefsAppRepository implements AppRepository {
     public Observable<Void> setAppNotHidden(final String appPackage) {
         return Observable.defer(() -> {
             doSetAppNotHidden(appPackage);
-            return Observable.empty();
+            return Observable.just(null);
         });
     }
 
