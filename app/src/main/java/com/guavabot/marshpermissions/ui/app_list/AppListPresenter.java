@@ -43,6 +43,7 @@ public class AppListPresenter implements Presenter {
         mSubscriptions.add(mAppListView.getSearchQuery()
                 .doOnNext(__ -> mAppListView.setLoading(true))
                 .subscribeOn(mSchedulers.mainThread())
+                .onBackpressureLatest()
                 .observeOn(mSchedulers.io())
                 .flatMap(filter -> mGetAppListFilteredUseCase.execute(filter))
                 .map((apps) -> Mapper.map(apps))
