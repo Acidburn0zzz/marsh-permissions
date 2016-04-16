@@ -1,11 +1,18 @@
 package com.guavabot.marshpermissions.ui.app_list;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
  * View that displays a list of apps.
  */
 public interface AppListView {
+
+    /**
+     * Display the list of apps.
+     */
+    void setApps(List<AppViewModel> apps);
 
     /**
      * Navigate to the Android application info screen for a package.

@@ -22,7 +22,6 @@ import rx.subscriptions.CompositeSubscription;
 public class AppListPresenter implements Presenter {
 
     private final AppListView mAppListView;
-    private final AppListViewModel mAppListViewModel;
     private final GetAppListFilteredUseCase mGetAppListFilteredUseCase;
     private final ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
     private final Schedulers mSchedulers;
@@ -30,12 +29,11 @@ public class AppListPresenter implements Presenter {
     private final CompositeSubscription mSubscriptions = new CompositeSubscription();
 
     @Inject
-    public AppListPresenter(AppListView appListView, AppListViewModel appListViewModel,
+    public AppListPresenter(AppListView appListView,
                             GetAppListFilteredUseCase getAppListFilteredUseCase,
                             ToggleAppHiddenUseCase toggleAppHiddenUseCase,
                             Schedulers schedulers) {
         mAppListView = appListView;
-        mAppListViewModel = appListViewModel;
         mGetAppListFilteredUseCase = getAppListFilteredUseCase;
         mToggleAppHiddenUseCase = toggleAppHiddenUseCase;
         mSchedulers = schedulers;
@@ -49,7 +47,7 @@ public class AppListPresenter implements Presenter {
                 .subscribeOn(mSchedulers.io())
                 .observeOn(mSchedulers.mainThread())
                 .subscribe(viewModels -> {
-                    mAppListViewModel.setApps(viewModels);
+                    mAppListView.setApps(viewModels);
                 }));
     }
 

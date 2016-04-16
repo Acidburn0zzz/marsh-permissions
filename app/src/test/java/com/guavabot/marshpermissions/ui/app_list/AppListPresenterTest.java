@@ -31,13 +31,12 @@ public class AppListPresenterTest {
     @Mock AppListView mAppListView;
     @Mock GetAppListFilteredUseCase mGetAppListFilteredUseCase;
     @Mock ToggleAppHiddenUseCase mToggleAppHiddenUseCase;
-    @Mock AppListViewModel mAppListViewModel;
 
     private static final String PACKAGE = "com.my.package";
 
     @Before
     public void setUp() throws Exception {
-        mTested = new AppListPresenter(mAppListView, mAppListViewModel, mGetAppListFilteredUseCase, mToggleAppHiddenUseCase,
+        mTested = new AppListPresenter(mAppListView, mGetAppListFilteredUseCase, mToggleAppHiddenUseCase,
                 new TestSchedulers());
 
         given(mAppListView.getPackageFilter()).willReturn(Observable.just(""));
@@ -57,7 +56,7 @@ public class AppListPresenterTest {
         mTested.onStart();
 
         verify(mAppListView).getPackageFilter();
-        verify(mAppListViewModel).setApps(AppListPresenter.Mapper.map(fakeApps));
+        verify(mAppListView).setApps(AppListPresenter.Mapper.map(fakeApps));
     }
 
     @Test
