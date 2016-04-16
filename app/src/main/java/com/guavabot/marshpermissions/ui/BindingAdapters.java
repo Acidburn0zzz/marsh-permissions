@@ -1,12 +1,11 @@
 package com.guavabot.marshpermissions.ui;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.databinding.BindingAdapter;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -24,12 +23,8 @@ public class BindingAdapters {
     @BindingAdapter("icon")
     public static void setIcon(ImageView imageView, String packageName) {
         Context context = imageView.getContext();
-        PackageManager packageManager = context.getPackageManager();
-        try {
-            Drawable drawable = packageManager.getApplicationIcon(packageName);
-            imageView.setImageDrawable(drawable);
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e("icon BindingAdapter", "app not found", e);
-        }
+        Picasso.with(context)
+                .load(AppIconRequestHandler.getUri(packageName))
+                .into(imageView);
     }
 }
