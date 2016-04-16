@@ -45,7 +45,7 @@ public class AppListPresenter implements Presenter {
                 .subscribeOn(mSchedulers.mainThread())
                 .onBackpressureLatest()
                 .observeOn(mSchedulers.io())
-                .flatMap(filter -> mGetAppListFilteredUseCase.execute(filter))
+                .switchMap(filter -> mGetAppListFilteredUseCase.execute(filter))
                 .map((apps) -> Mapper.map(apps))
                 .observeOn(mSchedulers.mainThread())
                 .doOnNext(__ -> mAppListView.setLoading(false))
