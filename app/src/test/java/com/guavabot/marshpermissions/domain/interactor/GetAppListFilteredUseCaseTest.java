@@ -9,15 +9,14 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.observers.TestSubscriber;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 /**
  * <p>Created by Ivan on 1/4/16.
@@ -37,19 +36,12 @@ public class GetAppListFilteredUseCaseTest {
         mTested = new GetAppListFilteredUseCase(mGetAppListUseCase);
 
         final List<App> apps = new ArrayList<>();
-        mApp1 = mock(App.class);
-        given(mApp1.getPackage()).willReturn("package1");
+        mApp1 = new App("package1", "Marshmallow", false, Collections.emptySet());
+        mApp2 = new App("package2", "Permissions", false, Collections.emptySet());
         apps.add(mApp1);
-        mApp2 = mock(App.class);
-        given(mApp2.getPackage()).willReturn("package2");
         apps.add(mApp2);
-        given(mGetAppListUseCase.execute())
-                .willReturn(Observable.create(new Observable.OnSubscribe<List<App>>() {
-                    @Override
-                    public void call(Subscriber<? super List<App>> subscriber) {
-                        subscriber.onNext(apps);
-                    }
-                }));
+        Observable<List<App>> hotObservable = Observable.create(subscriber -> subscriber.onNext(apps));
+        given(mGetAppListUseCase.execute()).willReturn(hotObservable);
     }
 
     @Test
@@ -77,7 +69,7 @@ public class GetAppListFilteredUseCaseTest {
     }
 
     @Test
-    public void shouldIncludeAppOnlyIfTextContained() {
+    public void shouldIncludeAppWithPackageNameContained() {
         TestSubscriber<List<App>> subscriber = new TestSubscriber<>();
 
         mTested.execute("age2").subscribe(subscriber);
@@ -88,4 +80,15 @@ public class GetAppListFilteredUseCaseTest {
         assertThat(result).containsOnly(mApp2);
     }
 
+    @Test
+    public void shouldIncludeAppWithAppNameContained() {
+        TestSubscriber<List<App>> subscriber = new TestSubscriber<>();
+
+        mTested.execute("Marsh").subscribe(subscriber);
+
+        subscriber.assertNoTerminalEvent();
+        subscriber.assertValueCount(1);
+        List<App> result = subscriber.getOnNextEvents().get(0);
+        assertThat(result).containsOnly(mApp1);
+    }
 }

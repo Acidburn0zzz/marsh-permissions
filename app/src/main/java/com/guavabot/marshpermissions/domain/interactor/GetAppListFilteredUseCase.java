@@ -36,6 +36,7 @@ public class GetAppListFilteredUseCase implements UseCase {
     private boolean includeApp(String filter, App app) {
         return filter == null
                 || filter.isEmpty()
-                || app.getPackage().contains(filter);
+                || app.getPackage().contains(filter)
+                || (app.getName() != null && app.getName().toLowerCase().contains(filter.toLowerCase()));
     }
 }
