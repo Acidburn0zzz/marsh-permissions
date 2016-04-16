@@ -7,14 +7,18 @@ import android.support.annotation.Nullable;
 
 import com.guavabot.marshpermissions.BR;
 
+import java.util.List;
+
 class AppViewModel extends BaseObservable {
 
     private final String mPackage;
     private final String mName;
+    private final List<String> mPermissions;
 
     private boolean mHidden;
 
-    AppViewModel(String aPackage, String name, boolean hidden) {
+    AppViewModel(String aPackage, String name, boolean hidden, List<String> permissions) {
+        mPermissions = permissions;
         if (aPackage == null) throw new NullPointerException();
         mPackage = aPackage;
         mName = name;
@@ -41,6 +45,10 @@ class AppViewModel extends BaseObservable {
         notifyPropertyChanged(BR.hidden);
     }
 
+    public List<String> getPermissions() {
+        return mPermissions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,9 +57,10 @@ class AppViewModel extends BaseObservable {
         AppViewModel that = (AppViewModel) o;
 
         if (mHidden != that.mHidden) return false;
-        //noinspection SimplifiableIfStatement
         if (!mPackage.equals(that.mPackage)) return false;
-        return !(mName != null ? !mName.equals(that.mName) : that.mName != null);
+        //noinspection SimplifiableIfStatement
+        if (mName != null ? !mName.equals(that.mName) : that.mName != null) return false;
+        return mPermissions.equals(that.mPermissions);
 
     }
 
@@ -60,6 +69,7 @@ class AppViewModel extends BaseObservable {
         int result = mPackage.hashCode();
         result = 31 * result + (mName != null ? mName.hashCode() : 0);
         result = 31 * result + (mHidden ? 1 : 0);
+        result = 31 * result + mPermissions.hashCode();
         return result;
     }
 
@@ -69,6 +79,7 @@ class AppViewModel extends BaseObservable {
                 "mPackage='" + mPackage + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mHidden=" + mHidden +
+                ", mPermissions=" + mPermissions +
                 '}';
     }
 }

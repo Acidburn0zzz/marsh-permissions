@@ -1,6 +1,7 @@
 package com.guavabot.marshpermissions.data;
 
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.guavabot.marshpermissions.domain.entity.App;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 
@@ -43,23 +44,33 @@ public class SharedPrefsAppRepositoryTest {
     public void setUp() throws Exception {
         mTested = new SharedPrefsAppRepository(mPackageManager, mHiddenPackages);
 
-        ArrayList<ApplicationInfo> list = new ArrayList<>();
+        ArrayList<PackageInfo> list = new ArrayList<>();
+
+        PackageInfo pck1 = new PackageInfo();
+        pck1.packageName = "package1";
         ApplicationInfo app1 = new ApplicationInfo();
         app1.targetSdkVersion = 22;
-        app1.packageName = "package1";
         given(mPackageManager.getApplicationLabel(app1)).willReturn("uno");
-        list.add(app1);
+        pck1.applicationInfo = app1;
+        list.add(pck1);
+
+        PackageInfo pck2 = new PackageInfo();
+        pck2.packageName = "package2";
         ApplicationInfo app2 = new ApplicationInfo();
         app2.targetSdkVersion = 23;
-        app2.packageName = "package2";
         given(mPackageManager.getApplicationLabel(app2)).willReturn("dos");
-        list.add(app2);
+        pck2.applicationInfo = app2;
+        list.add(pck2);
+
+        PackageInfo pck3 = new PackageInfo();
+        pck3.packageName = "package3";
         ApplicationInfo app3 = new ApplicationInfo();
         app3.targetSdkVersion = 24;
-        app3.packageName = "package3";
         given(mPackageManager.getApplicationLabel(app3)).willReturn(null);
-        list.add(app3);
-        given(mPackageManager.getInstalledApplications(anyInt()))
+        pck3.applicationInfo = app3;
+        list.add(pck3);
+
+        given(mPackageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS))
                 .willReturn(list);
         HashSet<String> hiddenAppsSet = new HashSet<>();
         hiddenAppsSet.add("package2");
@@ -76,7 +87,9 @@ public class SharedPrefsAppRepositoryTest {
         subscriber.assertValueCount(1);
         subscriber.assertCompleted();
         List<App> result = subscriber.getOnNextEvents().get(0);
-        assertThat(result).containsOnly(new App("package2", "dos", true), new App("package3", null, false));
+        assertThat(result).containsOnly(
+                new App("package2", "dos", true, Collections.emptyList()),
+                new App("package3", null, false, Collections.emptyList()));
     }
 
     @Test

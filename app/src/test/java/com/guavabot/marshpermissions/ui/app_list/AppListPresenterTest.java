@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -94,17 +95,17 @@ public class AppListPresenterTest {
 
     private List<App> getFakeApps() {
         List<App> apps = new ArrayList<>();
-        apps.add(new App(PACKAGE, "one", false));
-        apps.add(new App(PACKAGE + "2", "two", true));
-        apps.add(new App(PACKAGE + "3", null, false));
+        apps.add(new App(PACKAGE, "one", false, Collections.emptyList()));
+        apps.add(new App(PACKAGE + "2", "two", true, Collections.emptyList()));
+        apps.add(new App(PACKAGE + "3", null, false, Collections.emptyList()));
         return apps;
     }
 
     private List<AppViewModel> getFakeViewModels() {
         List<AppViewModel> apps = new ArrayList<>();
-        apps.add(new AppViewModel(PACKAGE, "one", false));
-        apps.add(new AppViewModel(PACKAGE + "2", "two", true));
-        apps.add(new AppViewModel(PACKAGE + "3", null, false));
+        apps.add(new AppViewModel(PACKAGE, "one", false, Collections.emptyList()));
+        apps.add(new AppViewModel(PACKAGE + "2", "two", true, Collections.emptyList()));
+        apps.add(new AppViewModel(PACKAGE + "3", null, false, Collections.emptyList()));
         return apps;
     }
 }

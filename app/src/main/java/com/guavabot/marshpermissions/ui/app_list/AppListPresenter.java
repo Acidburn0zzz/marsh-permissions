@@ -86,7 +86,7 @@ public class AppListPresenter implements Presenter {
         }
 
         static AppViewModel map(App app) {
-            return new AppViewModel(app.getPackage(), app.getName(), app.isHidden());
+            return new AppViewModel(app.getPackage(), app.getName(), app.isHidden(), app.getPermissions());
         }
     }
 }

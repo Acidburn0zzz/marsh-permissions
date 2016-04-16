@@ -3,16 +3,20 @@ package com.guavabot.marshpermissions.domain.entity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.List;
+
 public class App {
 
-    private final String mPackage;
+    private final String mPackageName;
     private final String mName;
     private final boolean mHidden;
+    private final List<String> mPermissions;
 
-    public App(String aPackage, String name, boolean hidden) {
-        if (aPackage == null) throw new NullPointerException();
+    public App(String packageName, String name, boolean hidden, List<String> permissions) {
+        mPermissions = permissions;
+        if (packageName == null) throw new NullPointerException();
 
-        mPackage = aPackage;
+        mPackageName = packageName;
         mName = name;
         mHidden = hidden;
     }
@@ -22,7 +26,7 @@ public class App {
      */
     @NonNull
     public String getPackage() {
-        return mPackage;
+        return mPackageName;
     }
 
     /**
@@ -38,6 +42,10 @@ public class App {
      */
     public boolean isHidden() {
         return mHidden;
+    }
+
+    public List<String> getPermissions() {
+        return mPermissions;
     }
 
     /**
@@ -62,26 +70,29 @@ public class App {
         App app = (App) o;
 
         if (mHidden != app.mHidden) return false;
+        if (!mPackageName.equals(app.mPackageName)) return false;
         //noinspection SimplifiableIfStatement
-        if (!mPackage.equals(app.mPackage)) return false;
-        return !(mName != null ? !mName.equals(app.mName) : app.mName != null);
+        if (mName != null ? !mName.equals(app.mName) : app.mName != null) return false;
+        return mPermissions.equals(app.mPermissions);
 
     }
 
     @Override
     public int hashCode() {
-        int result = mPackage.hashCode();
+        int result = mPackageName.hashCode();
         result = 31 * result + (mName != null ? mName.hashCode() : 0);
         result = 31 * result + (mHidden ? 1 : 0);
+        result = 31 * result + mPermissions.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "App{" +
-                "mPackage='" + mPackage + '\'' +
+                "mPackageName='" + mPackageName + '\'' +
                 ", mName='" + mName + '\'' +
                 ", mHidden=" + mHidden +
+                ", mPermissions=" + mPermissions +
                 '}';
     }
 }

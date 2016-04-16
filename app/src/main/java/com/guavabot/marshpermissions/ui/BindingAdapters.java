@@ -4,7 +4,9 @@ import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.guavabot.marshpermissions.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,5 +28,11 @@ public class BindingAdapters {
         Picasso.with(context)
                 .load(AppIconRequestHandler.getUri(packageName))
                 .into(imageView);
+    }
+
+    @BindingAdapter("permissions")
+    public static void setPermissions(TextView textView, List<String> permissions) {
+        String text = textView.getContext().getString(R.string.app_num_permissions, permissions.size());
+        textView.setText(text);
     }
 }

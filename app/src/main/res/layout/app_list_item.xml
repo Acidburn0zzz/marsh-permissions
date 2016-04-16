@@ -54,6 +54,15 @@
             android:textColor="@{app.hidden ? @color/textColorSecondary : @color/textColorPrimary}"
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="2 permissions"
+            app:permissions="@{app.permissions}"
+            android:textColor="@{app.hidden ? @color/textColorSecondary : @color/textColorPrimary}"
+            />
+
     </LinearLayout>
 
     <TextView
