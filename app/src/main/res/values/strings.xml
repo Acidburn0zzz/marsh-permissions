@@ -8,8 +8,18 @@
     <string name="pref_display_android">Display Android system apps</string>
     <string name="app_btn_hide">Hide</string>
     <string name="app_btn_unhide">Unhide</string>
-    <string name="app_num_permissions">%d granted permissions</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Search packages</string>
+
+    <string name="no_permissions">No permissions granted</string>
+    <string name="perm_contacts">Contacts</string>
+    <string name="perm_calendar">Calendar</string>
+    <string name="perm_sms">SMS</string>
+    <string name="perm_storage">Storage</string>
+    <string name="perm_location">Location</string>
+    <string name="perm_phone">Phone</string>
+    <string name="perm_microphone">Microphone</string>
+    <string name="perm_camera">Camera</string>
+    <string name="perm_sensors">Sensors</string>
 
 </resources>

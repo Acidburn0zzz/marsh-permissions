@@ -7,17 +7,17 @@ import android.support.annotation.Nullable;
 
 import com.guavabot.marshpermissions.BR;
 
-import java.util.List;
+import java.util.Set;
 
 class AppViewModel extends BaseObservable {
 
     private final String mPackage;
     private final String mName;
-    private final List<String> mPermissions;
+    private final Set<String> mPermissions;
 
     private boolean mHidden;
 
-    AppViewModel(String aPackage, String name, boolean hidden, List<String> permissions) {
+    AppViewModel(String aPackage, String name, boolean hidden, Set<String> permissions) {
         mPermissions = permissions;
         if (aPackage == null) throw new NullPointerException();
         mPackage = aPackage;
@@ -45,7 +45,7 @@ class AppViewModel extends BaseObservable {
         notifyPropertyChanged(BR.hidden);
     }
 
-    public List<String> getPermissions() {
+    public Set<String> getPermissions() {
         return mPermissions;
     }
 

@@ -7,11 +7,11 @@ import android.support.annotation.NonNull;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.guavabot.marshpermissions.domain.DangerousPermissions;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.gateway.AppRepository;
 import com.jakewharton.rxrelay.PublishRelay;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +52,7 @@ public class SharedPrefsAppRepository implements AppRepository {
                     CharSequence label = mPackageManager.getApplicationLabel(info.applicationInfo);
                     String appName = label != null ? label.toString() : null;
                     boolean hidden = hiddenApps.contains(info.packageName);
-                    List<String> permissions = findGrantedPermissions(info);
+                    Set<String> permissions = findGrantedPermissions(info);
                     return new App(info.packageName, appName, hidden, permissions);
                 })
                 .collect(Collectors.toList());
@@ -63,16 +63,19 @@ public class SharedPrefsAppRepository implements AppRepository {
     }
 
     @NonNull
-    private List<String> findGrantedPermissions(PackageInfo info) {
-        List<String> permissions = new ArrayList<>();
+    private Set<String> findGrantedPermissions(PackageInfo info) {
+        Set<String> permissions = new HashSet<>();
         String[] requestedPermissions = info.requestedPermissions;
         if (requestedPermissions != null) {
             for (int i = 0; i < requestedPermissions.length; i++) {
                 String permission = requestedPermissions[i];
                 int permissionFlags = info.requestedPermissionsFlags[i];
                 boolean granted = (permissionFlags & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
-                if (granted) {
-                    permissions.add(permission);
+                if (granted && DangerousPermissions.isDangerous(permission)) {
+                    String permissionGroup = DangerousPermissions.getPermissionGroup(permission);
+                    if (permission != null) {
+                        permissions.add(permissionGroup);
+                    }
                 }
             }
         }

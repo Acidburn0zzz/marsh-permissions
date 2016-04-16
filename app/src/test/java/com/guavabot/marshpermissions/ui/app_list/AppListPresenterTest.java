@@ -94,17 +94,17 @@ public class AppListPresenterTest {
 
     private List<App> getFakeApps() {
         List<App> apps = new ArrayList<>();
-        apps.add(new App(PACKAGE, "one", false, Collections.emptyList()));
-        apps.add(new App(PACKAGE + "2", "two", true, Collections.emptyList()));
-        apps.add(new App(PACKAGE + "3", null, false, Collections.emptyList()));
+        apps.add(new App(PACKAGE, "one", false, Collections.emptySet()));
+        apps.add(new App(PACKAGE + "2", "two", true, Collections.emptySet()));
+        apps.add(new App(PACKAGE + "3", null, false, Collections.emptySet()));
         return apps;
     }
 
     private List<AppViewModel> getFakeViewModels() {
         List<AppViewModel> apps = new ArrayList<>();
-        apps.add(new AppViewModel(PACKAGE, "one", false, Collections.emptyList()));
-        apps.add(new AppViewModel(PACKAGE + "2", "two", true, Collections.emptyList()));
-        apps.add(new AppViewModel(PACKAGE + "3", null, false, Collections.emptyList()));
+        apps.add(new AppViewModel(PACKAGE, "one", false, Collections.emptySet()));
+        apps.add(new AppViewModel(PACKAGE + "2", "two", true, Collections.emptySet()));
+        apps.add(new AppViewModel(PACKAGE + "3", null, false, Collections.emptySet()));
         return apps;
     }
 }

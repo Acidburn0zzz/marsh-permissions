@@ -3,16 +3,16 @@ package com.guavabot.marshpermissions.domain.entity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.List;
+import java.util.Set;
 
 public class App {
 
     private final String mPackageName;
     private final String mName;
     private final boolean mHidden;
-    private final List<String> mPermissions;
+    private final Set<String> mPermissions;
 
-    public App(String packageName, String name, boolean hidden, List<String> permissions) {
+    public App(String packageName, String name, boolean hidden, Set<String> permissions) {
         mPermissions = permissions;
         if (packageName == null) throw new NullPointerException();
 
@@ -44,7 +44,7 @@ public class App {
         return mHidden;
     }
 
-    public List<String> getPermissions() {
+    public Set<String> getPermissions() {
         return mPermissions;
     }
 
