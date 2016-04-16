@@ -8,6 +8,8 @@ import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 
 /**
@@ -18,6 +20,7 @@ public class GetAppListUseCase implements UseCase {
     private final AppRepository mAppRepository;
     private final AppSettings mAppSettings;
 
+    @Inject
     public GetAppListUseCase(AppRepository appRepository, AppSettings appSettings) {
         mAppRepository = appRepository;
         mAppSettings = appSettings;

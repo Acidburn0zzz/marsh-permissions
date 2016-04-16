@@ -6,6 +6,8 @@ import com.guavabot.marshpermissions.domain.entity.App;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 
 /**
@@ -15,6 +17,7 @@ public class GetAppListFilteredUseCase implements UseCase {
 
     private final GetAppListUseCase mGetAppListUseCase;
 
+    @Inject
     public GetAppListFilteredUseCase(GetAppListUseCase getAppListUseCase) {
         mGetAppListUseCase = getAppListUseCase;
     }
