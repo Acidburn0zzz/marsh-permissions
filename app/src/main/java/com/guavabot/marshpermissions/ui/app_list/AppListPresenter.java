@@ -41,11 +41,14 @@ public class AppListPresenter implements Presenter {
     @Override
     public void onStart() {
         mSubscriptions.add(mAppListView.getSearchQuery()
+                .doOnNext(__ -> mAppListView.setLoading(true))
                 .subscribeOn(mSchedulers.mainThread())
                 .observeOn(mSchedulers.io())
                 .flatMap(filter -> mGetAppListFilteredUseCase.execute(filter))
                 .map((apps) -> Mapper.map(apps))
                 .observeOn(mSchedulers.mainThread())
+                .doOnNext(__ -> mAppListView.setLoading(false))
+                .distinctUntilChanged()
                 .subscribe(viewModels -> {
                     mAppListView.setApps(viewModels);
                 }));

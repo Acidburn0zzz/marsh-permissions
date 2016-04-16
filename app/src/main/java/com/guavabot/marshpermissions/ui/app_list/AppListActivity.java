@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -38,6 +39,7 @@ public class AppListActivity extends BaseActivity implements AppListView {
     @Inject AppListAdapter mAdapter;
 
     @Bind(R.id.recycler) RecyclerView mRecyclerView;
+    @Bind(R.id.progress_bar) ContentLoadingProgressBar mProgressBar;
 
     private final PublishSubject<SearchView> mSearchViewSubject = PublishSubject.create();
 
@@ -117,6 +119,15 @@ public class AppListActivity extends BaseActivity implements AppListView {
     @Override
     public void setApps(List<AppViewModel> apps) {
         mAdapter.setItems(apps);
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+        if (loading) {
+            mProgressBar.show();
+        } else {
+            mProgressBar.hide();
+        }
     }
 
     @Override

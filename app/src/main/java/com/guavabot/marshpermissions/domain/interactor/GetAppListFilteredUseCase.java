@@ -29,8 +29,7 @@ public class GetAppListFilteredUseCase implements UseCase {
         return mGetAppListUseCase.execute()
                 .map(apps -> Stream.of(apps)
                         .filter(app -> includeApp(filter, app))
-                        .collect(Collectors.toList()))
-                .distinctUntilChanged();
+                        .collect(Collectors.toList()));
     }
 
     private boolean includeApp(String filter, App app) {

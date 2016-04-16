@@ -15,6 +15,11 @@ public interface AppListView {
     void setApps(List<AppViewModel> apps);
 
     /**
+     * Show a progress bar.
+     */
+    void setLoading(boolean loading);
+
+    /**
      * Navigate to the Android application info screen for a package.
      */
     void startAppInfo(String packageName);
