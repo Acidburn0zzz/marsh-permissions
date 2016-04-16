@@ -45,21 +45,24 @@ public class SharedPrefsAppRepository implements AppRepository {
 
     private List<App> doFindAppsMarshmallow() {
         Set<String> hiddenApps = mHiddenPackages.get();
-        List<PackageInfo> infos = getPackageInfos();
-        return Stream.of(infos)
+        return Stream.of(getPackageInfos())
                 .filter(info -> info.applicationInfo.targetSdkVersion >= 23)
-                .map(info -> {
-                    CharSequence label = mPackageManager.getApplicationLabel(info.applicationInfo);
-                    String appName = label != null ? label.toString() : null;
-                    boolean hidden = hiddenApps.contains(info.packageName);
-                    Set<String> permissions = findGrantedPermissions(info);
-                    return new App(info.packageName, appName, hidden, permissions);
-                })
+                .map(info -> mapToApp(hiddenApps, info))
+                .sorted((lhs, rhs) -> compare(lhs, rhs))
                 .collect(Collectors.toList());
     }
 
     private List<PackageInfo> getPackageInfos() {
         return mPackageManager.getInstalledPackages(PackageManager.GET_PERMISSIONS);
+    }
+
+    @NonNull
+    private App mapToApp(Set<String> hiddenApps, PackageInfo info) {
+        CharSequence label = mPackageManager.getApplicationLabel(info.applicationInfo);
+        String appName = label != null ? label.toString() : null;
+        boolean hidden = hiddenApps.contains(info.packageName);
+        Set<String> permissions = findGrantedPermissions(info);
+        return new App(info.packageName, appName, hidden, permissions);
     }
 
     @NonNull
@@ -80,6 +83,20 @@ public class SharedPrefsAppRepository implements AppRepository {
             }
         }
         return permissions;
+    }
+
+    private int compare(App lhs, App rhs) {
+        if (lhs.getPermissions().isEmpty() != rhs.getPermissions().isEmpty()) {
+            return Boolean.compare(lhs.getPermissions().isEmpty(), rhs.getPermissions().isEmpty());
+        } else if (lhs.getName() != null && rhs.getName() != null) {
+            return lhs.getName().compareTo(rhs.getName());
+        } else if (lhs.getName() != null) {
+            return -1;
+        } else if (rhs.getName() != null) {
+            return 1;
+        } else {
+            return lhs.getPackage().compareTo(rhs.getPackage());
+        }
     }
 
     @NonNull
