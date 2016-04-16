@@ -30,7 +30,7 @@ public class App {
     }
 
     /**
-     * Application name.
+     * Application package name.
      */
     @Nullable
     public String getName() {
@@ -59,7 +59,7 @@ public class App {
      * True if this app appears to be from the Android system.
      */
     public boolean isAndroidApp() {
-        return getPackage().startsWith("com.android");
+        return getPackage().equals("android") || getPackage().startsWith("com.android");
     }
 
     @Override
