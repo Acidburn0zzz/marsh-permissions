@@ -55,8 +55,8 @@ public class GetAppListFilteredUseCaseTest {
     @Test
     public void shouldReturnFullListIfFilterNull() {
         TestSubscriber<List<App>> subscriber = new TestSubscriber<>();
-        mTested.execute(Observable.just((String) null))
-                .subscribe(subscriber);
+
+        mTested.execute(null).subscribe(subscriber);
 
         subscriber.assertNoTerminalEvent();
         subscriber.assertValueCount(1);
@@ -67,8 +67,8 @@ public class GetAppListFilteredUseCaseTest {
     @Test
     public void shouldReturnFullListIfFilterEmpty() {
         TestSubscriber<List<App>> subscriber = new TestSubscriber<>();
-        mTested.execute(Observable.just(""))
-                .subscribe(subscriber);
+
+        mTested.execute("").subscribe(subscriber);
 
         subscriber.assertNoTerminalEvent();
         subscriber.assertValueCount(1);
@@ -79,8 +79,8 @@ public class GetAppListFilteredUseCaseTest {
     @Test
     public void shouldIncludeAppOnlyIfTextContained() {
         TestSubscriber<List<App>> subscriber = new TestSubscriber<>();
-        mTested.execute(Observable.just("age2"))
-                .subscribe(subscriber);
+
+        mTested.execute("age2").subscribe(subscriber);
 
         subscriber.assertNoTerminalEvent();
         subscriber.assertValueCount(1);

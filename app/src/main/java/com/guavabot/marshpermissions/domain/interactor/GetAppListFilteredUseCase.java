@@ -25,15 +25,17 @@ public class GetAppListFilteredUseCase implements UseCase {
     /**
      * Returns a hot observable with lists of filtered apps to display.
      */
-    public Observable<List<App>> execute(Observable<String> packageFilter) {
-        return packageFilter
-                .flatMap(filter -> mGetAppListUseCase.execute()
-                                .map(apps -> Stream.of(apps)
-                                        .filter(app -> filter == null
-                                                || filter.isEmpty()
-                                                || app.getPackage().contains(filter))
-                                        .collect(Collectors.toList()))
-                )
+    public Observable<List<App>> execute(String filter) {
+        return mGetAppListUseCase.execute()
+                .map(apps -> Stream.of(apps)
+                        .filter(app -> includeApp(filter, app))
+                        .collect(Collectors.toList()))
                 .distinctUntilChanged();
+    }
+
+    private boolean includeApp(String filter, App app) {
+        return filter == null
+                || filter.isEmpty()
+                || app.getPackage().contains(filter);
     }
 }

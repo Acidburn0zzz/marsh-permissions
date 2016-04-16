@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -41,10 +40,11 @@ public class AppListPresenter implements Presenter {
 
     @Override
     public void onStart() {
-        Observable<String> packageFilterStream = mAppListView.getPackageFilter();
-        mSubscriptions.add(mGetAppListFilteredUseCase.execute(packageFilterStream)
+        mSubscriptions.add(mAppListView.getSearchQuery()
+                .subscribeOn(mSchedulers.mainThread())
+                .observeOn(mSchedulers.io())
+                .flatMap(filter -> mGetAppListFilteredUseCase.execute(filter))
                 .map((apps) -> Mapper.map(apps))
-                .subscribeOn(mSchedulers.io())
                 .observeOn(mSchedulers.mainThread())
                 .subscribe(viewModels -> {
                     mAppListView.setApps(viewModels);

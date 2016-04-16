@@ -20,7 +20,7 @@ public interface AppListView {
     void startAppInfo(String packageName);
 
     /**
-     * Returns a filter for the list of apps to be displayed.
+     * Returns a filter for the list of apps to be displayed or null if there's no search query.
      */
-    Observable<String> getPackageFilter();
+    Observable<String> getSearchQuery();
 }

@@ -90,11 +90,15 @@ public class AppListActivity extends BaseActivity implements AppListView {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 searchView.setQuery("", true);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                hideKeyboard(searchView);
                 return true;
             }
         });
+    }
+
+    private void hideKeyboard(SearchView searchView) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
     }
 
     @Override
@@ -125,7 +129,7 @@ public class AppListActivity extends BaseActivity implements AppListView {
     }
 
     @Override
-    public Observable<String> getPackageFilter() {
+    public Observable<String> getSearchQuery() {
         return mSearchViewSubject.asObservable()
                 .doOnSubscribe(() -> supportInvalidateOptionsMenu())
                 .flatMap(searchView -> RxSearchView.queryTextChanges(searchView))
