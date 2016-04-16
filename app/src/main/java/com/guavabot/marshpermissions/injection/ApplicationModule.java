@@ -18,7 +18,7 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Dagger module that provides objects which will live during the application lifecycle.
+ * Dagger module that provides objects for the whole application.
  */
 @Module
 public class ApplicationModule {

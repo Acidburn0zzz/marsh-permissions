@@ -58,7 +58,6 @@ public class AppListActivity extends BaseActivity implements AppListView {
     private void inject() {
         AppListComponent appListComponent = DaggerAppListComponent.builder()
                 .applicationComponent(getApplicationComponent())
-                .activityModule(getActivityModule())
                 .appListModule(new AppListModule(this))
                 .build();
         appListComponent.inject(this);

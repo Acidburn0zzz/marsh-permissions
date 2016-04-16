@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.guavabot.marshpermissions.injection.ActivityScope;
+import com.guavabot.marshpermissions.injection.ComponentScope;
 import com.guavabot.marshpermissions.ui.ListAdapter;
 
 import java.util.Collections;
@@ -16,7 +16,7 @@ import javax.inject.Inject;
 /**
  * Adapter for a list of apps with a button.
  */
-@ActivityScope
+@ComponentScope
 class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.Holder> implements ListAdapter<AppViewModel> {
 
     private final AppListPresenter mAppListPresenter;

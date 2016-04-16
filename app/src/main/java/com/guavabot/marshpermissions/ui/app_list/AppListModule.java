@@ -5,7 +5,7 @@ import com.guavabot.marshpermissions.domain.gateway.AppSettings;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
-import com.guavabot.marshpermissions.injection.ActivityScope;
+import com.guavabot.marshpermissions.injection.ComponentScope;
 
 import dagger.Module;
 import dagger.Provides;
@@ -22,22 +22,22 @@ public class AppListModule {
         mAppListView = appListView;
     }
 
-    @Provides @ActivityScope
+    @Provides @ComponentScope
     AppListView provideAppListView() {
         return mAppListView;
     }
 
-    @Provides @ActivityScope
+    @Provides @ComponentScope
     GetAppListUseCase provideGetAppListUseCase(AppRepository appRepository, AppSettings appSettings) {
         return new GetAppListUseCase(appRepository, appSettings);
     }
 
-    @Provides @ActivityScope
+    @Provides @ComponentScope
     GetAppListFilteredUseCase provideGetAppListFilteredUseCase(GetAppListUseCase getAppListUseCase) {
         return new GetAppListFilteredUseCase(getAppListUseCase);
     }
 
-    @Provides @ActivityScope
+    @Provides @ComponentScope
     ToggleAppHiddenUseCase provideToggleAppHiddenUseCase(AppRepository appRepository) {
         return new ToggleAppHiddenUseCase(appRepository);
     }

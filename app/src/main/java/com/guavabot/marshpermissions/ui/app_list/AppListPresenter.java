@@ -4,7 +4,7 @@ import com.guavabot.marshpermissions.Schedulers;
 import com.guavabot.marshpermissions.domain.entity.App;
 import com.guavabot.marshpermissions.domain.interactor.GetAppListFilteredUseCase;
 import com.guavabot.marshpermissions.domain.interactor.ToggleAppHiddenUseCase;
-import com.guavabot.marshpermissions.injection.ActivityScope;
+import com.guavabot.marshpermissions.injection.ComponentScope;
 import com.guavabot.marshpermissions.ui.Presenter;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Presenter for a list of apps in an {@link AppListView}.
  */
-@ActivityScope
+@ComponentScope
 public class AppListPresenter implements Presenter {
 
     private final AppListView mAppListView;

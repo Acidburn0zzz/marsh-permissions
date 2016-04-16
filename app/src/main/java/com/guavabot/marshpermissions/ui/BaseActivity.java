@@ -3,7 +3,6 @@ package com.guavabot.marshpermissions.ui;
 import android.support.v7.app.AppCompatActivity;
 
 import com.guavabot.marshpermissions.AndroidApplication;
-import com.guavabot.marshpermissions.injection.ActivityModule;
 import com.guavabot.marshpermissions.injection.ApplicationComponent;
 
 /**
@@ -16,13 +15,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected ApplicationComponent getApplicationComponent() {
         return ((AndroidApplication) getApplication()).getApplicationComponent();
-    }
-
-    /**
-     * Get an Activity module for dependency injection.
-     */
-    protected ActivityModule getActivityModule() {
-        return new ActivityModule(this);
     }
 
     protected abstract Presenter getPresenter();
