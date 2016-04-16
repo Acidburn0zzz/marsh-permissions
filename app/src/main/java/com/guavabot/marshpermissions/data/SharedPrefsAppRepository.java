@@ -39,7 +39,7 @@ public class SharedPrefsAppRepository implements AppRepository {
 
     @Override
     public Observable<List<App>> findAppsMarshmallow() {
-        return Observable.defer(() -> Observable.just(doFindAppsMarshmallow()));
+        return Observable.fromCallable(() -> doFindAppsMarshmallow());
     }
 
     private List<App> doFindAppsMarshmallow() {
@@ -67,9 +67,9 @@ public class SharedPrefsAppRepository implements AppRepository {
 
     @Override
     public Observable<Void> setAppHidden(final String appPackage) {
-        return Observable.defer(() -> {
+        return Observable.fromCallable(() -> {
             doSetAppHidden(appPackage);
-            return Observable.just(null);
+            return null;
         });
     }
 
@@ -86,9 +86,9 @@ public class SharedPrefsAppRepository implements AppRepository {
 
     @Override
     public Observable<Void> setAppNotHidden(final String appPackage) {
-        return Observable.defer(() -> {
+        return Observable.fromCallable(() -> {
             doSetAppNotHidden(appPackage);
-            return Observable.just(null);
+            return null;
         });
     }
 
